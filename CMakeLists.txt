@@ -1,33 +1,26 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 project(Licenta)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(SFML 3 REQUIRED COMPONENTS Graphics)
-find_package(OpenGL REQUIRED)
+# Build SFML from source using its bundled dependencies (Graphics only)
+set(SFML_USE_SYSTEM_DEPS OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_AUDIO OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_NETWORK OFF CACHE BOOL "" FORCE)
+add_subdirectory(include/SFML)
 
-add_executable(sfml-app
-    main.cpp
-    include/imgui/imgui.cpp
-    include/imgui/imgui_draw.cpp
-    include/imgui/imgui_widgets.cpp
-    include/imgui/imgui_tables.cpp
-    include/imgui/imgui_demo.cpp
-    include/imgui-sfml/imgui-SFML.cpp
-)
+# Configure imgui-sfml subdirectory options before adding it
+set(IMGUI_SFML_FIND_SFML OFF CACHE BOOL "" FORCE)
+set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/include/imgui CACHE PATH "" FORCE)
+set(IMGUI_SFML_USE_DEFAULT_CONFIG OFF CACHE BOOL "" FORCE)
+set(IMGUI_SFML_CONFIG_DIR ${CMAKE_SOURCE_DIR} CACHE PATH "" FORCE)
+set(IMGUI_SFML_CONFIG_NAME "imconfig-custom.h" CACHE STRING "" FORCE)
 
-target_include_directories(sfml-app PRIVATE
-    include/imgui
-    include/imgui-sfml
-    ${CMAKE_SOURCE_DIR}
-)
+add_subdirectory(include/imgui-sfml)
 
-target_compile_definitions(sfml-app PRIVATE
-    IMGUI_USER_CONFIG="imconfig-custom.h"
-)
+add_executable(sfml-app main.cpp)
 
 target_link_libraries(sfml-app PRIVATE
-    SFML::Graphics
-    OpenGL::GL
+    ImGui-SFML::ImGui-SFML
 )

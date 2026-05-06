@@ -4,3 +4,6 @@
 [submodule "include/imgui"]
 	path = include/imgui
 	url = git@github.com:ocornut/imgui.git
+[submodule "include/SFML"]
+	path = include/SFML
+	url = git@github.com:SFML/SFML.git
