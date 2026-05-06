@@ -1,54 +1,78 @@
-#include <SFML/Graphics.hpp>
-#include <imgui-SFML.h>
-#include <imgui.h>
+#include <vector>
+#include <utility>
+#include <iostream>
 
-int main()
+#define uint unsigned int
+
+class Node
 {
-    sf::RenderWindow window(sf::VideoMode({1280, 720}), "SFML + ImGui");
-    window.setFramerateLimit(60);
-    ImGui::SFML::Init(window);
-
-    sf::CircleShape shape(50.f);
-    shape.setFillColor(sf::Color::Green);
-    shape.setPosition({100.f, 100.f});
-
-    float color[3] = {0.f, 1.f, 0.f};
-    float radius = 50.f;
-    float pos[2] = {100.f, 100.f};
-
-    sf::Clock deltaClock;
-    while (window.isOpen())
-    {
-        while (const std::optional event = window.pollEvent())
-        {
-            ImGui::SFML::ProcessEvent(window, *event);
-            if (event->is<sf::Event::Closed>())
-                window.close();
-        }
-
-        ImGui::SFML::Update(window, deltaClock.restart());
-
-        ImGui::Begin("Shape controls");
-        if (ImGui::ColorEdit3("Color", color))
-            shape.setFillColor(sf::Color(
-                static_cast<uint8_t>(color[0] * 255),
-                static_cast<uint8_t>(color[1] * 255),
-                static_cast<uint8_t>(color[2] * 255)));
-        if (ImGui::SliderFloat("Radius", &radius, 10.f, 200.f))
-        {
-            shape.setRadius(radius);
-            shape.setOrigin({radius, radius});
-        }
-        if (ImGui::SliderFloat2("Position", pos, 0.f, 1280.f))
-            shape.setPosition({pos[0], pos[1]});
-        ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-        ImGui::End();
-
-        window.clear(sf::Color(30, 30, 30));
-        window.draw(shape);
-        ImGui::SFML::Render(window);
-        window.display();
+    static uint id_cont;
+    uint m_id;
+public:
+    Node(){
+        m_id = id_cont;
+        id_cont++;
     }
+    uint get_id(){
+        return m_id;
+    }
+};
+uint Node::id_cont = 0;
 
-    ImGui::SFML::Shutdown();
+
+class Lane
+{
+    double distance; 
+};
+
+class Edge
+{
+    Node nodes[2];
+    Lane lanes;
+};
+
+class Network
+{
+    uint m_size;
+    std::vector<std::vector<uint>> m_turn_map;
+    std::vector<Node> m_nodes{};
+
+public:
+    Network(uint size, std::vector<std::pair<uint, std::vector<uint>>> connections){
+        m_size = size;
+        m_nodes.resize(size);
+        m_turn_map.resize(size);
+        for(std::pair p : connections){
+            m_turn_map[p.first] = p.second;
+        }
+    }
+    // Debug prints
+    void print_node_ids()
+    {
+        for(Node node: m_nodes){
+            std::cout << node.get_id() << ' ';
+        }
+        std::cout << '\n';
+    }
+    void print_all_connections()
+    {
+        for(uint i=0; i<m_size; i++)
+        {
+            std::cout << i << ": ";
+            for(uint node_id : m_turn_map[i])
+            {
+                std::cout << node_id << ' ';
+            }
+            std::cout << '\n';
+        }
+    }
+};
+
+
+
+int main(){
+    Network example = Network(4, {{0, {1,2,3}}, {1, {2, 3}}, {2, {1, 3}}, {3, {1, 2}}});
+    example.print_node_ids();
+    example.print_all_connections();
+    return 0;
 }
