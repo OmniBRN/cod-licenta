@@ -1,0 +1,17 @@
+# Build
+build/
+compile_commands.json
+
+# IDE
+.idea/
+*.code-workspace
+
+# Compiled output
+*.o
+*.a
+*.so
+*.out
+
+# OS
+.DS_Store
+Thumbs.db
