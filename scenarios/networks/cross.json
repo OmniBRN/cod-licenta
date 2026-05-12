@@ -1,0 +1,280 @@
+{
+    "nodes": [
+        {
+            "id": 0,
+            "pos": [
+                0,
+                0
+            ],
+            "kind": "junction"
+        },
+        {
+            "id": 1,
+            "pos": [
+                -200,
+                0
+            ],
+            "kind": "source"
+        },
+        {
+            "id": 2,
+            "pos": [
+                -200,
+                -1
+            ],
+            "kind": "sink"
+        },
+        {
+            "id": 3,
+            "pos": [
+                200,
+                0
+            ],
+            "kind": "source"
+        },
+        {
+            "id": 4,
+            "pos": [
+                200,
+                -1
+            ],
+            "kind": "sink"
+        },
+        {
+            "id": 5,
+            "pos": [
+                0,
+                200
+            ],
+            "kind": "source"
+        },
+        {
+            "id": 6,
+            "pos": [
+                1,
+                200
+            ],
+            "kind": "sink"
+        },
+        {
+            "id": 7,
+            "pos": [
+                0,
+                -200
+            ],
+            "kind": "source"
+        },
+        {
+            "id": 8,
+            "pos": [
+                1,
+                -200
+            ],
+            "kind": "sink"
+        }
+    ],
+    "edges": [
+        {
+            "id": 0,
+            "from": 1,
+            "to": 0,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    -200,
+                    0
+                ],
+                [
+                    0,
+                    0
+                ]
+            ]
+        },
+        {
+            "id": 1,
+            "from": 0,
+            "to": 2,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    0,
+                    -1
+                ],
+                [
+                    -200,
+                    -1
+                ]
+            ]
+        },
+        {
+            "id": 2,
+            "from": 3,
+            "to": 0,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    200,
+                    0
+                ],
+                [
+                    0,
+                    0
+                ]
+            ]
+        },
+        {
+            "id": 3,
+            "from": 0,
+            "to": 4,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    0,
+                    -1
+                ],
+                [
+                    200,
+                    -1
+                ]
+            ]
+        },
+        {
+            "id": 4,
+            "from": 5,
+            "to": 0,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    0,
+                    200
+                ],
+                [
+                    0,
+                    0
+                ]
+            ]
+        },
+        {
+            "id": 5,
+            "from": 0,
+            "to": 6,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    1,
+                    0
+                ],
+                [
+                    1,
+                    200
+                ]
+            ]
+        },
+        {
+            "id": 6,
+            "from": 7,
+            "to": 0,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    0,
+                    -200
+                ],
+                [
+                    0,
+                    0
+                ]
+            ]
+        },
+        {
+            "id": 7,
+            "from": 0,
+            "to": 8,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    1,
+                    0
+                ],
+                [
+                    1,
+                    -200
+                ]
+            ]
+        }
+    ],
+    "turn_map": [
+        {
+            "from_edge": 0,
+            "from_lane": 0,
+            "to_edge": 3,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 0,
+            "from_lane": 0,
+            "to_edge": 5,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 0,
+            "from_lane": 0,
+            "to_edge": 7,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 2,
+            "from_lane": 0,
+            "to_edge": 1,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 2,
+            "from_lane": 0,
+            "to_edge": 5,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 2,
+            "from_lane": 0,
+            "to_edge": 7,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 4,
+            "from_lane": 0,
+            "to_edge": 1,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 4,
+            "from_lane": 0,
+            "to_edge": 3,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 4,
+            "from_lane": 0,
+            "to_edge": 7,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 6,
+            "from_lane": 0,
+            "to_edge": 1,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 6,
+            "from_lane": 0,
+            "to_edge": 3,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 6,
+            "from_lane": 0,
+            "to_edge": 5,
+            "to_lane": 0
+        }
+    ]
+}
