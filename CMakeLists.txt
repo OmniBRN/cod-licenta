@@ -59,6 +59,7 @@ FetchContent_MakeAvailable(Catch2)
 enable_testing()
 add_executable(sim_tests
     tests/test_main.cpp
+    tests/test_geometry.cpp
 )
 
 target_link_libraries(sim_tests PRIVATE simcore Catch2::Catch2WithMain)
