@@ -16,3 +16,11 @@ imgui.ini
 # OS
 .DS_Store
 Thumbs.db
+
+# Misc
+
+misc/
+
+# Outputs
+
+data/
