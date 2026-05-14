@@ -2,6 +2,7 @@
 #include "core/network.hpp"
 #include "core/car.hpp"
 #include "core/behaviour.hpp"
+#include "rng/prng.hpp"
 #include <vector>
 #include <iosfwd>
 namespace sim {
@@ -22,6 +23,8 @@ public:
 
     ProfileId register_profile(BehaviourProfile p);
 
+    void seed(uint64_t master) { m_rng.seed_all(master); }
+
 private:
 
     Network m_net;
@@ -32,6 +35,8 @@ private:
     size_t m_cars_spawned = 0;
     size_t m_cars_exited = 0;
     CarId m_next_car_id = 1;
+
+    RngBank m_rng;
 
     void enforce_conservation() const;
 

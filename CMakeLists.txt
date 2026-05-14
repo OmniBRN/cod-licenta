@@ -63,6 +63,7 @@ add_executable(sim_tests
     tests/test_geometry.cpp
     tests/test_simulation_skeleton.cpp
     tests/test_network_loader.cpp
+    tests/test_rng.cpp
 )
 
 target_link_libraries(sim_tests PRIVATE simcore Catch2::Catch2WithMain)
