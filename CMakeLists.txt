@@ -28,6 +28,12 @@ target_include_directories(simcore PUBLIC
     ${CMAKE_SOURCE_DIR}/include
 )
 
+option(SIM_SANITIZE "Enable ASan/UBSan" OFF)
+if(SIM_SANITIZE)
+    target_compile_options(simcore PUBLIC -fsanitize=address,undefined -fno-omit-frame-pointer)
+    target_link_options(simcore PUBLIC -fsanitize=address,undefined)
+endif()
+
 # SFML
 set(SFML_USE_SYSTEM_DEPS OFF CACHE BOOL "" FORCE)
 set(SFML_BUILD_AUDIO OFF CACHE BOOL "" FORCE)

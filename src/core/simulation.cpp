@@ -54,11 +54,12 @@ void Simulation::dump_state(std::ostream& os) const {
     for (const auto& c: m_cars) {
         os
         << "car " << c.id << '\n'
-        << "edge=" << c.current_edge << '\n'
-        << "lane=" << static_cast<int>(c.current_lane) << '\n'
-        << "offset=" << c.offset << '\n'
-        << "v=" << c.speed << '\n';
+        << "\tedge=" << c.current_edge << '\n'
+        << "\tlane=" << static_cast<int>(c.current_lane) << '\n'
+        << "\toffset=" << c.offset << '\n'
+        << "\tv=" << c.speed << '\n';
     }
+    os << "\n";
 }
 
 }
