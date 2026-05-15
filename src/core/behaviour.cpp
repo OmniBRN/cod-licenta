@@ -15,7 +15,7 @@ double idm_accel(const BehaviourProfile& bp, MetersPerSec v, Meters gap, MetersP
 
     double interact_term = 0.0;
     if (std::isfinite(gap)) {
-        const double s_star = s_min + std::max(0.0, v * T * v * dv / (2.0 * std::sqrt(a * b)));
+        const double s_star = s_min + std::max(0.0, v * T + v * dv / (2.0 * std::sqrt(a * b)));
         const double s = std::max(gap, 0.1);
         interact_term = (s_star / s) * (s_star / s);
     }
