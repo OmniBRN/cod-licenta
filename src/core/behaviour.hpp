@@ -6,7 +6,7 @@ namespace sim {
 struct BehaviourProfile {
     std::string name = "default";
     // Temporary Values to be replaced by IDM
-    MetersPerSec desired_speed = 50 * (1000/3600); // 50 km/h;
+    MetersPerSec desired_speed = 50.0 * (10.0/36.0); // 50 km/h;
     double max_accel = 1.5;
     double comfort_brake = 2.0;
     Seconds reaction_time = 1.2;
@@ -17,6 +17,8 @@ struct BehaviourProfile {
     double traffic_law_compliance = 0.95;
 
 };
+
+double idm_accel(const BehaviourProfile& bp, MetersPerSec v, Meters gap, MetersPerSec dv);
 
 inline BehaviourProfile default_profile(){ return {}; };
 
