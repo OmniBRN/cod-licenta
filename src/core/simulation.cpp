@@ -1,7 +1,9 @@
 #include "core/simulation.hpp"
+#include "core/behaviour.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <utility>
+#include <limits>
 
 namespace sim {
 
@@ -31,6 +33,9 @@ CarId Simulation::add_car_at(EdgeId edge, LaneIdx lane, Meters offset, ProfileId
 }
 
 void Simulation::tick() {
+    for (auto& c: m_cars) {
+        step_car(c, std::numeric_limits<Meters>::infinity(), 0.0);
+    }
     ++m_tick;
     enforce_conservation();
 }
@@ -60,6 +65,39 @@ void Simulation::dump_state(std::ostream& os) const {
         << "\tv=" << c.speed << '\n';
     }
     os << "\n";
+}
+
+CarId Simulation::spawn_car(Car proto) {
+    proto.id = m_next_car_id++;
+    proto.spawn_tick = m_tick;
+    m_cars.push_back(std::move(proto));
+    ++m_cars_spawned;
+    return m_cars.back().id;
+}
+
+void Simulation::step_car(Car& c, Meters gap, MetersPerSec dv) {
+    const BehaviourProfile& bp = m_profiles[c.profile_id];
+
+    c.accel = idm_accel(bp, c.speed, gap, dv);
+    c.speed = std::max(0.0, c.speed + c.accel * TICK_DT);
+    c.offset = c.offset + c.speed * TICK_DT;
+
+    advance_edges(c);
+}
+
+void Simulation::advance_edges(Car& c) {
+    Meters L = m_net.edge_length(c.current_edge);
+    while (c.offset >= L) {
+        if (c.route_index + 1 >= c.route.size()) {
+            c.offset = L;
+            return;
+        }
+        c.offset -= L;
+        c.route_index += 1;
+        c.current_edge = c.route[c.route_index];
+        c.current_lane = std::min<LaneIdx>(c.current_lane, m_net.edges[c.current_edge].lanes_forward - 1);
+        L = m_net.edge_length(c.current_edge);
+    }
 }
 
 }

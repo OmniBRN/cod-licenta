@@ -19,7 +19,7 @@ static Network make_trivial_net(){
     return net;
 }
 
-TEST_CASE("simulation_skeletonm", "[sim]") {
+TEST_CASE("simulation_skeleton", "[sim]") {
     Simulation sim(make_trivial_net());
     sim.add_car_at(0,0, 10.0, 0);
     sim.add_car_at(0,0, 30.0, 0);

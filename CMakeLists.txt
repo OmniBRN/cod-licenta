@@ -73,5 +73,6 @@ add_executable(sim_tests
     tests/test_idm.cpp
 )
 
+target_include_directories(sim_tests PRIVATE ${CMAKE_SOURCE_DIR}/tests)
 target_link_libraries(sim_tests PRIVATE simcore Catch2::Catch2WithMain)
 add_test(NAME sim_tests COMMAND sim_tests)

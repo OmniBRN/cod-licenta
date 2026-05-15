@@ -25,6 +25,14 @@ public:
 
     void seed(uint64_t master) { m_rng.seed_all(master); }
 
+    CarId spawn_car(Car proto);
+
+    size_t spawned() const { return m_cars_spawned; }
+    size_t exited() const { return m_cars_exited; }
+    size_t in_network() const { return m_cars.size(); }
+
+    void step_car (Car& c, Meters gap, MetersPerSec dv);
+
 private:
 
     Network m_net;
@@ -39,6 +47,11 @@ private:
     RngBank m_rng;
 
     void enforce_conservation() const;
+
+    std::vector<std::vector<std::vector<size_t>>> m_lane_cars;
+    size_t m_failed_spawns = 0;
+
+    void advance_edges(Car& c);
 
 };
 }
