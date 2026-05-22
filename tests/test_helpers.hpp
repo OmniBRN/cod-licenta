@@ -25,4 +25,19 @@ inline sim::Simulation make_two_edge_sim(double seg = 50.0)
     net.out_edges[1] = {1};
     return Simulation(std::move(net));
 }
+inline sim::Simulation make_line_sim(double len, uint8_t lanes = 1) {
+    using namespace sim;
+    Network net;
+    net.nodes = { { 0, {0,0}, NodeKind::Source }, { 1, {len, 0}, NodeKind::Sink } };
+    Edge e; e.id = 0; e.from = 0; e.to = 1; e.lanes_forward = lanes; 
+    e.polyline = {{0,0}, {len,0}}; e.length = polyline_length(e.polyline);
+    net.edges = {e};
+    net.out_edges.resize(2);
+    net.out_edges[0] = {0};
+    return Simulation(std::move(net));
+}
+
+inline sim::Simulation make_long_lane_sim(double len) {
+    return make_line_sim(len);
+}
 }

@@ -48,10 +48,20 @@ private:
 
     void enforce_conservation() const;
 
-    std::vector<std::vector<std::vector<size_t>>> m_lane_cars;
     size_t m_failed_spawns = 0;
 
     void advance_edges(Car& c);
+
+    struct LeaderInfo {
+        Meters gap;
+        MetersPerSec lead_speed;
+        bool exists;
+    };
+
+    std::vector<std::vector<std::vector<size_t>>> m_lane_cars;
+
+    void rebuild_lane_index();
+    LeaderInfo find_leader(size_t car_idx) const;
 
 };
 }

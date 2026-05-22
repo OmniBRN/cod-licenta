@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <utility>
 #include <limits>
+#include <algorithm>
 
 namespace sim {
 
@@ -33,11 +34,16 @@ CarId Simulation::add_car_at(EdgeId edge, LaneIdx lane, Meters offset, ProfileId
 }
 
 void Simulation::tick() {
-    for (auto& c: m_cars) {
-        step_car(c, std::numeric_limits<Meters>::infinity(), 0.0);
+    rebuild_lane_index();
+
+    for (size_t i = 0; i < m_cars.size(); ++i) {
+        auto L = find_leader(i);
+        Meters gap = L.exists ? L.gap : std::numeric_limits<Meters>::infinity();
+        MetersPerSec dv = L.exists ? (m_cars[i].speed - L.lead_speed) : 0.0;
+        step_car(m_cars[i], gap, dv);
     }
-    ++m_tick;
     enforce_conservation();
+    ++m_tick;
 }
 
 void Simulation::enforce_conservation() const {
@@ -98,6 +104,43 @@ void Simulation::advance_edges(Car& c) {
         c.current_lane = std::min<LaneIdx>(c.current_lane, m_net.edges[c.current_edge].lanes_forward - 1);
         L = m_net.edge_length(c.current_edge);
     }
+}
+
+void Simulation::rebuild_lane_index() {
+    const size_t E = m_net.edges.size();
+    m_lane_cars.assign(E, {});
+    for (size_t e = 0; e < E; ++e)
+        m_lane_cars[e].assign(m_net.edges[e].lanes_forward, {});
+    
+    for (size_t i = 0; i < m_cars.size(); ++i) {
+        const Car& c = m_cars[i];
+        m_lane_cars[c.current_edge][c.current_lane].push_back(i);
+    }
+    for (auto& per_edge : m_lane_cars) 
+        for (auto& lane: per_edge)
+            std::sort(lane.begin(), lane.end(), 
+                [&](size_t a, size_t b) {
+                    return m_cars[a].offset < m_cars[b].offset;
+                }
+            );
+
+}
+
+Simulation::LeaderInfo Simulation::find_leader(size_t car_idx) const {
+    const Car& c = m_cars[car_idx];
+    const auto& lane = m_lane_cars[c.current_edge][c.current_lane];
+
+    auto it = std::upper_bound(lane.begin(), lane.end(), c.offset, [&](Meters off, size_t other){
+        return off < m_cars[other].offset;
+    });
+
+    if (it == lane.end()) {
+        return {std::numeric_limits<Meters>::infinity(), 0.0, false};
+    }
+    const Car& lead = m_cars[*it];
+    Meters gap = (lead.offset - c.offset) - CAR_LENGTH;
+    return {std::max(gap, 0.0), lead.speed, true};
+
 }
 
 }
