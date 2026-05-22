@@ -21,6 +21,7 @@ add_library(simcore STATIC
     src/core/simulation.cpp
     src/io/network_loader.cpp
     src/rng/prng.cpp
+    src/core/routing.cpp
 )
 
 target_include_directories(simcore PUBLIC
@@ -71,6 +72,7 @@ add_executable(sim_tests
     tests/test_network_loader.cpp
     tests/test_rng.cpp
     tests/test_idm.cpp
+    tests/test_routing.cpp
 )
 
 target_include_directories(sim_tests PRIVATE ${CMAKE_SOURCE_DIR}/tests)
