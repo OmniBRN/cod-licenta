@@ -88,5 +88,26 @@ Network load_network(const std::filesystem::path& p){
 
 }
 
+std::vector<SourceSpec> load_sources(const std::filesystem::path& p) {
+    std::ifstream f(p);
+    require(f.good(), "cannot open " + p.string());
+
+    json j;
+    f >> j;
+
+    require(j.contains("sources") && j["sources"].is_array(), "missing 'sources'");
+    std::vector<SourceSpec> out;
+    for(const auto& s: j["sources"]) {
+        SourceSpec sp;
+        sp.node = s.at("node").get<NodeId>();
+        sp.rate_per_sec = s.at("rate_per_sec").get<double>();
+        sp.archetype_mix = s.at("archetype_mix").get<std::vector<double>>();
+        sp.destinations = s.at("destination").get<std::vector<NodeId>>();
+        sp.destination_mix = s.at("destination_mix").get<std::vector<double>>();
+        out.push_back(std::move(sp));
+    }
+    return out;
+}
+
 }
 

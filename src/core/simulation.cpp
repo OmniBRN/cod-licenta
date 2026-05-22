@@ -1,5 +1,6 @@
 #include "core/simulation.hpp"
 #include "core/behaviour.hpp"
+#include "core/routing.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <utility>
@@ -142,5 +143,53 @@ Simulation::LeaderInfo Simulation::find_leader(size_t car_idx) const {
     return {std::max(gap, 0.0), lead.speed, true};
 
 }
+
+void Simulation::set_sources(std::vector<SourceSpec> s) {
+    size_t need = 1;
+    for (const auto& sp : s) 
+        need = std::max(need, sp.archetype_mix.size());
+    while (m_profiles.size() < need)
+        m_profiles.push_back(default_profile());
+    m_spawner = Spawner(std::move(s));
+}
+
+void Simulation::do_spawning(){
+    auto pending = m_spawner.sample_for_tick(m_rng.arrivals, m_rng.archetypes, m_rng.destinations);
+
+    for(auto& p : pending) {
+        auto path = shortest_path_edges(m_net, p.source_node, p.destionation);
+        if (!path) {
+            ++m_failed_spawns;
+            continue;
+        }
+        Car proto;
+        proto.current_edge = (*path)[0];
+        proto.current_lane = 0;
+        proto.offset = 0.0;
+        proto.speed = 0.0;
+        proto.route = std::move(*path);
+        proto.route_index = 0;
+        proto.profile_id = p.profile;
+        proto.target_exit = p.destionation;
+
+        if (spawn_point_blocked(proto)) {
+            ++m_failed_spawns;
+            continue;
+        }
+        spawn_car(std::move(proto));
+    }
+}
+
+bool Simulation::spawn_point_blocked(const Car& c) const {
+    for(const auto& o : m_cars)
+        if(o.current_edge == c.current_edge &&
+           o.current_lane == c.current_edge &&
+           o.offset < CAR_LENGTH + 2.0)
+            return true;
+    return false;
+}
+
+
+
 
 }

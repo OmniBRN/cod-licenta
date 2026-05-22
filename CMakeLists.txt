@@ -22,6 +22,7 @@ add_library(simcore STATIC
     src/io/network_loader.cpp
     src/rng/prng.cpp
     src/core/routing.cpp
+    src/sim/spawner.cpp
 )
 
 target_include_directories(simcore PUBLIC

@@ -3,6 +3,7 @@
 #include "core/car.hpp"
 #include "core/behaviour.hpp"
 #include "rng/prng.hpp"
+#include "sim/spawner.hpp"
 #include <vector>
 #include <iosfwd>
 namespace sim {
@@ -33,6 +34,8 @@ public:
 
     void step_car (Car& c, Meters gap, MetersPerSec dv);
 
+    void set_sources(std::vector<SourceSpec> s);
+
 private:
 
     Network m_net;
@@ -62,6 +65,11 @@ private:
 
     void rebuild_lane_index();
     LeaderInfo find_leader(size_t car_idx) const;
+
+    Spawner m_spawner{ {} };
+    size_t m_failed_spawns = 0;
+    void do_spawning();
+    bool spawn_point_blocked(const Car& c) const;
 
 };
 }

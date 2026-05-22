@@ -1,6 +1,7 @@
 #pragma once
 #include "core/simulation.hpp"
 #include "core/network.hpp"
+#include "io/network_loader.hpp"
 #include <utility>
 namespace simtest
 {
@@ -39,5 +40,12 @@ inline sim::Simulation make_line_sim(double len, uint8_t lanes = 1) {
 
 inline sim::Simulation make_long_lane_sim(double len) {
     return make_line_sim(len);
+}
+
+inline sim::Simulation load_scenario(const std::filesystem::path& path) {
+    auto net = sim::io::load_network(path);
+    sim::Simulation s(std::move(net));
+    s.set_sources(sim::io::load_sources(path));
+    return s;
 }
 }
