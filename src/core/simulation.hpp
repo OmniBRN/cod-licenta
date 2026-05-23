@@ -74,5 +74,6 @@ private:
 
     void retire_at_sinks();
 
+    void update_intended_lanes();
 };
 }

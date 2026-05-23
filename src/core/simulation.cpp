@@ -197,6 +197,7 @@ void Simulation::do_spawning(){
         proto.offset = 0.0;
         proto.speed = 0.0;
         proto.route = std::move(*path);
+        proto.intended_lane = compute_intended_lane(m_net, proto);
         proto.route_index = 0;
         proto.profile_id = p.profile;
         proto.target_exit = p.destionation;
@@ -218,6 +219,10 @@ bool Simulation::spawn_point_blocked(const Car& c) const {
     return false;
 }
 
+void Simulation::update_intended_lanes() {
+    for (auto& c : m_cars)
+        c.intended_lane = compute_intended_lane(m_net, c);
+}
 
 
 

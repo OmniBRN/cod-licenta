@@ -75,6 +75,7 @@ add_executable(sim_tests
     tests/test_idm.cpp
     tests/test_routing.cpp
     tests/test_e2e.cpp
+    tests/test_intended_lane.cpp
 )
 
 target_include_directories(sim_tests PRIVATE ${CMAKE_SOURCE_DIR}/tests)
