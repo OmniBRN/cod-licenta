@@ -171,11 +171,14 @@ Simulation::LeaderInfo Simulation::find_leader(size_t car_idx) const {
 }
 
 void Simulation::set_sources(std::vector<SourceSpec> s) {
-    size_t need = 1;
-    for (const auto& sp : s) 
-        need = std::max(need, sp.archetype_mix.size());
-    while (m_profiles.size() < need)
-        m_profiles.push_back(default_profile());
+    while (m_profiles.size() < 5) {
+        m_profiles.resize(0);
+        m_profiles.push_back(ideal_profile()); // 0
+        m_profiles.push_back(cautious_profile()); // 1
+        m_profiles.push_back(normal_profile()); // 2
+        m_profiles.push_back(aggresive_profile()); // 3
+        m_profiles.push_back(opportunist_profile()); // 4
+    }
     m_spawner = Spawner(std::move(s));
 }
 
