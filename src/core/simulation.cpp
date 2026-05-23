@@ -35,6 +35,9 @@ CarId Simulation::add_car_at(EdgeId edge, LaneIdx lane, Meters offset, ProfileId
 }
 
 void Simulation::tick() {
+
+    do_spawning();
+
     rebuild_lane_index();
 
     for (size_t i = 0; i < m_cars.size(); ++i) {
@@ -43,8 +46,31 @@ void Simulation::tick() {
         MetersPerSec dv = L.exists ? (m_cars[i].speed - L.lead_speed) : 0.0;
         step_car(m_cars[i], gap, dv);
     }
+
+    retire_at_sinks();
+
     enforce_conservation();
+
     ++m_tick;
+}
+
+void Simulation::retire_at_sinks() {
+    for (size_t i = 0; i<m_cars.size();) {
+        const Car& c = m_cars[i];
+        bool last_edge = (c.route_index + 1 >= c.route.size());
+        Meters L = m_net.edge_length(c.current_edge);
+        NodeId end_node = m_net.edges[c.current_edge].to;
+        bool at_sink = last_edge && c.offset >= L && m_net.nodes[end_node].kind == NodeKind::Sink;
+
+        if (at_sink) {
+            m_cars[i] = std::move(m_cars.back());
+            m_cars.pop_back();
+            ++m_cars_exited;
+        } else {
+            ++i;
+        }
+
+    }
 }
 
 void Simulation::enforce_conservation() const {

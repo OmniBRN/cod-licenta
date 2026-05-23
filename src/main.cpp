@@ -35,13 +35,7 @@ int main(int argc, char** argv){
         auto net = sim::io::load_network(network_path);
         sim::Simulation s(std::move(net));
         s.seed(static_cast<uint64_t>(seed));
-
-        s.add_car_at(0, 0, 10.0, 0);
-        s.add_car_at(2, 0, 20.0, 0);
-        s.add_car_at(4, 0, 20.0, 0);
-        s.add_car_at(6, 0, 20.0, 0);
-        s.add_car_at(8, 0, 20.0, 0);
-
+        s.set_sources(sim::io::load_sources(network_path));
         for(int i=0; i < ticks; ++i) s.tick();
         s.dump_state(std::cout);
 

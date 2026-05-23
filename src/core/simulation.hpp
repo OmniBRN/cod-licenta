@@ -36,6 +36,8 @@ public:
 
     void set_sources(std::vector<SourceSpec> s);
 
+    void debug_leak() { ++m_cars_exited;}
+
 private:
 
     Network m_net;
@@ -67,9 +69,10 @@ private:
     LeaderInfo find_leader(size_t car_idx) const;
 
     Spawner m_spawner{ {} };
-    size_t m_failed_spawns = 0;
     void do_spawning();
     bool spawn_point_blocked(const Car& c) const;
+
+    void retire_at_sinks();
 
 };
 }

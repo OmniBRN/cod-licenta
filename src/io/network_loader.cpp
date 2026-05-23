@@ -102,7 +102,7 @@ std::vector<SourceSpec> load_sources(const std::filesystem::path& p) {
         sp.node = s.at("node").get<NodeId>();
         sp.rate_per_sec = s.at("rate_per_sec").get<double>();
         sp.archetype_mix = s.at("archetype_mix").get<std::vector<double>>();
-        sp.destinations = s.at("destination").get<std::vector<NodeId>>();
+        sp.destinations = s.at("destinations").get<std::vector<NodeId>>();
         sp.destination_mix = s.at("destination_mix").get<std::vector<double>>();
         out.push_back(std::move(sp));
     }

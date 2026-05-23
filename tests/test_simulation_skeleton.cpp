@@ -11,7 +11,7 @@ static Network make_trivial_net(){
     Edge e;
     e.id = 0; e.from = 0; e.to = 1;
     e.lanes_forward = 1;
-    e.polyline = {{0,0}, {100, 0}};
+    e.polyline = {{0,0}, {1000, 0}};
     e.length = polyline_length(e.polyline);
     net.edges.push_back(e);
     net.out_edges.resize(2);
