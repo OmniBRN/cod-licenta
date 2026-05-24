@@ -153,7 +153,7 @@ void Simulation::rebuild_lane_index() {
 
 }
 
-Simulation::LeaderInfo Simulation::find_leader(size_t car_idx) const {
+Simulation::LeaderInfo Simulation::find_leader(size_t car_idx, bool obey_lights) const {
     const Car& c = m_cars[car_idx];
     const auto& lane = m_lane_cars[c.current_edge][c.current_lane];
 
@@ -161,12 +161,27 @@ Simulation::LeaderInfo Simulation::find_leader(size_t car_idx) const {
         return off < m_cars[other].offset;
     });
 
-    if (it == lane.end()) {
-        return {std::numeric_limits<Meters>::infinity(), 0.0, false};
+    LeaderInfo real = (it==lane.end()) 
+    ? LeaderInfo{std::numeric_limits<Meters>::infinity(), 0.0, false}
+    : [&](){
+        const Car& lead = m_cars[*it];
+        Meters gap = (lead.offset - c.offset) - CAR_LENGTH;
+        return LeaderInfo{std::max(gap, 0.0), lead.speed, true};
+    }();
+
+    if (obey_lights) {
+        auto lit = m_lights.find(c.current_edge);
+        if (lit != m_lights.end() && lit->second.is_red()) {
+            Meters stop_line = m_net.edge_length(c.current_edge);
+            Meters gap_to_stop = (stop_line - c.offset) - CAR_LENGTH;
+            LeaderInfo stop{std::max(gap_to_stop, 0.0), 0.0, true};
+            if (!real.exists || stop.gap < real.gap)
+                return stop;
+        }
     }
-    const Car& lead = m_cars[*it];
-    Meters gap = (lead.offset - c.offset) - CAR_LENGTH;
-    return {std::max(gap, 0.0), lead.speed, true};
+
+    return real;
+
 
 }
 

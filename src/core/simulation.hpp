@@ -70,7 +70,7 @@ private:
     std::vector<std::vector<std::vector<size_t>>> m_lane_cars;
 
     void rebuild_lane_index();
-    LeaderInfo find_leader(size_t car_idx) const;
+    LeaderInfo find_leader(size_t car_idx, bool obey_lights = 1) const;
 
     Spawner m_spawner{ {} };
     void do_spawning();
