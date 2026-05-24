@@ -224,6 +224,12 @@ void Simulation::update_intended_lanes() {
         c.intended_lane = compute_intended_lane(m_net, c);
 }
 
+void Simulation::set_lights(std::unordered_map<EdgeId, TrafficLight> lights) {
+    m_lights = std::move(lights);
+}
 
+void Simulation::tick_lights() {
+    for (auto& [eid, tl] : m_lights) tl.advance();
+}
 
 }

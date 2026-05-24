@@ -2,10 +2,12 @@
 #include "core/network.hpp"
 #include "core/car.hpp"
 #include "core/behaviour.hpp"
+#include "core/traffic_light.hpp"
 #include "rng/prng.hpp"
 #include "sim/spawner.hpp"
 #include <vector>
 #include <iosfwd>
+#include <unordered_map>
 namespace sim {
 class Simulation {
 public:
@@ -37,6 +39,8 @@ public:
     void set_sources(std::vector<SourceSpec> s);
 
     void debug_leak() { ++m_cars_exited;}
+
+    void set_lights(std::unordered_map<EdgeId, TrafficLight> lights);
 
 private:
 
@@ -75,5 +79,10 @@ private:
     void retire_at_sinks();
 
     void update_intended_lanes();
+
+    std::unordered_map<EdgeId, TrafficLight> m_lights;
+    void tick_lights();
+
+
 };
 }

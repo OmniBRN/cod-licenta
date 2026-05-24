@@ -109,5 +109,29 @@ std::vector<SourceSpec> load_sources(const std::filesystem::path& p) {
     return out;
 }
 
+std::unordered_map<EdgeId, TrafficLight> load_lights(const std::filesystem::path& p) {
+    std::ifstream f(p);
+    require(f.good(), "cannot open " + p.string());
+
+    json j;
+    f >> j;
+
+    require(j.contains("lights") && j["lights"].is_array(), "missing 'lights'");
+    std::unordered_map<EdgeId, TrafficLight> out;
+    for(const auto& jl : j["lights"]) {
+        EdgeId eid = jl.at("edge").get<EdgeId>();
+        TrafficLight tl;
+        tl.green_duration = jl.at("green_dur").get<TickT>();
+        tl.yellow_duration = jl.at("yellow_dur").get<TickT>();
+        tl.red_duration = jl.at("red_dur").get<TickT>();
+        std::string start_color = jl.at("start_color").get<std::string>();
+        if (start_color == "green") tl.color = LightColor::Green;
+        else if (start_color == "yellow") tl.color = LightColor::Yellow;
+        else tl.color = LightColor::Red;
+        out[eid] = tl;
+    }
+    return out;
+}
+
 }
 

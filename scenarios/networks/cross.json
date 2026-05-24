@@ -8,6 +8,12 @@
             "destination_mix": [0.5, 0.3, 0.2]
         }
     ],
+    "lights": [
+        {"edge": 0, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "green"},
+        {"edge": 2, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "red"},
+        {"edge": 4, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "green"},
+        {"edge": 6, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "red"}
+    ],
     "nodes": [
         {
             "id": 0,
