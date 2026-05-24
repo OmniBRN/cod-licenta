@@ -78,6 +78,7 @@ add_executable(sim_tests
     tests/test_e2e.cpp
     tests/test_intended_lane.cpp
     tests/test_traffic_light.cpp
+    tests/test_lane_change.cpp
 )
 
 target_include_directories(sim_tests PRIVATE ${CMAKE_SOURCE_DIR}/tests)

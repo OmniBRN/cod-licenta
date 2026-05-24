@@ -38,13 +38,27 @@ void Simulation::tick() {
 
     do_spawning();
 
+    tick_lights();
+
+    update_intended_lanes();
+
     rebuild_lane_index();
 
     for (size_t i = 0; i < m_cars.size(); ++i) {
-        auto L = find_leader(i);
+        const BehaviourProfile& bp = m_profiles[m_cars[i].profile_id];
+        bool obey = m_rng.compliance.bernoulli(bp.traffic_law_compliance);
+        auto L = find_leader(i, obey);
         Meters gap = L.exists ? L.gap : std::numeric_limits<Meters>::infinity();
         MetersPerSec dv = L.exists ? (m_cars[i].speed - L.lead_speed) : 0.0;
         step_car(m_cars[i], gap, dv);
+    }
+
+    do_lane_change();
+
+    for (auto& c: m_cars) {
+        c.speed = std::max(0.0, c.speed + c.accel * TICK_DT);
+        c.offset = c.offset + c.speed * TICK_DT;
+        advance_edges(c);
     }
 
     retire_at_sinks();
@@ -112,10 +126,6 @@ void Simulation::step_car(Car& c, Meters gap, MetersPerSec dv) {
     const BehaviourProfile& bp = m_profiles[c.profile_id];
 
     c.accel = idm_accel(bp, c.speed, gap, dv);
-    c.speed = std::max(0.0, c.speed + c.accel * TICK_DT);
-    c.offset = c.offset + c.speed * TICK_DT;
-
-    advance_edges(c);
 }
 
 void Simulation::advance_edges(Car& c) {
@@ -245,6 +255,70 @@ void Simulation::set_lights(std::unordered_map<EdgeId, TrafficLight> lights) {
 
 void Simulation::tick_lights() {
     for (auto& [eid, tl] : m_lights) tl.advance();
+}
+
+bool Simulation::gap_accept(size_t car_idx, LaneIdx target) const {
+    const Car& c = m_cars[car_idx];
+    EdgeId e = c.current_edge;
+    if (target >= m_net.edges[e].lanes_forward) return false;
+
+    constexpr Meters SAFE_FRONT = 10.0;
+    constexpr Meters SAFE_REAR = 6.0;
+
+    for (size_t idx: m_lane_cars[e][target]) {
+        const Car& o = m_cars[idx];
+        if (o.offset > c.offset) {
+            if ((o.offset - c.offset) < SAFE_FRONT + CAR_LENGTH) return false;
+        } else {
+            if ((c.offset - o.offset) < SAFE_REAR + CAR_LENGTH) return false;
+        }
+    }
+    return true;
+}
+
+bool Simulation::in_intesection(const Car& c) const {
+    const Edge& e = m_net.edges[c.current_edge];
+    bool both_junction = m_net.nodes[e.from].kind == NodeKind::Junction &&
+                         m_net.nodes[e.to].kind == NodeKind::Junction;
+    return both_junction && e.length < 20.0;
+}
+
+void Simulation::do_lane_change() {
+    for(size_t i = 0; i<m_cars.size(); ++i) {
+        Car& c = m_cars[i];
+
+        if (in_intesection(c)) continue;
+
+        uint8_t max_lane = m_net.edges[c.current_edge].lanes_forward-1;
+        if (c.current_lane != c.intended_lane) {
+            if(gap_accept(i, c.intended_lane)) {
+                c.current_lane = c.intended_lane;
+                continue;
+            }
+        }
+
+        int step = (c.intended_lane > c.current_lane) ? 1 : -1;
+        LaneIdx next = static_cast<LaneIdx>(c.current_lane + step);
+        if (gap_accept(i, next)) {
+            c.current_lane = next;
+            continue;
+        }
+
+        const BehaviourProfile& bp = m_profiles[c.profile_id];
+
+        if (!m_rng.lane_change.bernoulli(bp.aggressiveness * 0.05)) continue;
+
+        for(int delta:{-1, 1}) {
+            int target_int = static_cast<int>(c.current_lane) + delta;
+            if (target_int < 0 || target_int > static_cast<int>(max_lane)) continue;
+            LaneIdx target = static_cast<LaneIdx>(target_int);
+            if(c.intended_lane != c.current_lane) continue;
+            if(gap_accept(i,target)){
+                c.current_lane = target; 
+                break;
+            }
+        }
+    }
 }
 
 }

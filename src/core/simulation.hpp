@@ -83,6 +83,9 @@ private:
     std::unordered_map<EdgeId, TrafficLight> m_lights;
     void tick_lights();
 
+    bool gap_accept(size_t car_idx, LaneIdx target) const;
+    bool in_intesection(const Car& c) const;
+    void do_lane_change();
 
 };
 }

@@ -24,3 +24,13 @@ TEST_CASE("invariant breaker throws", "[e2e]") {
     s.debug_leak();
     REQUIRE_THROWS_AS(s.tick(), std::logic_error);
 }
+
+TEST_CASE("e2e with traffic lights", "[e2e]") {
+    Simulation s = simtest::load_scenario("scenarios/networks/cross.json");
+    s.seed(42);
+    for (int i = 0; i < 6000; ++i) s.tick();
+    REQUIRE(s.spawned() > 0);
+    REQUIRE(s.exited() > 0);
+    REQUIRE(s.spawned() == s.exited() + s.in_network());
+
+}
