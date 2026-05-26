@@ -37,7 +37,7 @@ void MetricsWriter::write_trip(const TripRecord& r) {
 
 void MetricsWriter::write_tick(const TickRecord& r) {
     if (!m_open) return;
-    m_trips << r.tick << ','
+    m_ticks << r.tick << ','
             << r.in_network << ','
             << r.throughput << '\n';
 }
