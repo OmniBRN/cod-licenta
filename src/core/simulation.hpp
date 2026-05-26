@@ -5,9 +5,12 @@
 #include "core/traffic_light.hpp"
 #include "rng/prng.hpp"
 #include "sim/spawner.hpp"
+#include "io/metrics_writer.hpp"
 #include <vector>
 #include <iosfwd>
 #include <unordered_map>
+#include <memory>
+
 namespace sim {
 class Simulation {
 public:
@@ -41,6 +44,10 @@ public:
     void debug_leak() { ++m_cars_exited;}
 
     void set_lights(std::unordered_map<EdgeId, TrafficLight> lights);
+    const std::unordered_map<EdgeId, TrafficLight>& lights() const { return m_lights;}
+
+    void set_output_dir(const std::filesystem::path& out_dir, const std::string& stamp);
+    void set_warmup_ticks(TickT);
 
 private:
 
@@ -87,5 +94,7 @@ private:
     bool in_intesection(const Car& c) const;
     void do_lane_change();
 
+    std::unique_ptr<io::MetricsWriter> m_writer;
+    TickT m_warmup_ticks = 0;
 };
 }

@@ -3,41 +3,62 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <filesystem>
 
 
 static void usage() {
-    std::cerr << "usage: sim --network <path> [--ticks N] [--seed S]\n";
+    std::cerr << "headless: sim --scenerio <json_path> [--ticks N] [--seed S] [--warmup N] --out <output_dir><\n"
+              << "gui: sim --scenario <json_path> --seed N";
+}
+
+static std::string make_stamp(const std::string& sc, long seed) {
+    auto base = std::filesystem::path(sc).stem().string();
+    return base + "_s" + std::to_string(seed) + "_" + GIT_COMMIT_HASH;
 }
 
 int main(int argc, char** argv){
-
-    std::string network_path;
-    int ticks = 100;
+    std::string scenario;
+    int ticks = 12000;
     long seed = 42;
+    long warmup = 0;
+    std::string out_dir;
 
     for (int i=1; i<argc; ++i) {
         std::string a = argv[i];
-        auto need_next = [&](const char* name) -> const char* {
+        auto next = [&]() -> const char* {
             if (i + 1 >= argc) { usage(); std::exit(2);}
-            (void)name;
             return argv[++i];
         };
-        if (a == "--network") network_path = need_next("network");
-        else if (a == "--ticks") ticks = std::atoi(need_next("ticks"));
-        else if (a == "--seed") seed = std::atol(need_next("seed"));
+        if (a == "--scenario") scenario = next();
+        else if (a == "--ticks") ticks = std::atoi(next());
+        else if (a == "--seed") seed = std::atol(next());
+        else if (a == "--warmup") warmup = std::atol(next());
+        else if (a == "--out") out_dir = next();
         else { usage(); return 2; }
 
     }
 
-    if (network_path.empty()) { usage(); return 2;}
+    if (scenario.empty()) { usage(); return 2;}
 
     try {
-        auto net = sim::io::load_network(network_path);
+        auto net = sim::io::load_network(scenario);
         sim::Simulation s(std::move(net));
         s.seed(static_cast<uint64_t>(seed));
-        s.set_sources(sim::io::load_sources(network_path));
-        for(int i=0; i < ticks; ++i) s.tick();
-        s.dump_state(std::cout);
+        s.set_sources(sim::io::load_sources(scenario));
+        s.set_lights(sim::io::load_lights(scenario));
+        
+        if(!out_dir.empty()) {
+            s.set_output_dir(out_dir, make_stamp(scenario, seed));
+            s.set_warmup_ticks(static_cast<sim::TickT>(warmup));
+            for(int i=0; i < ticks; ++i) s.tick();
+            std::cout << "spawned=" << s.spawned() << '\n'
+                      << "exited=" << s.exited() << '\n'
+                      << "in_net=" << s.in_network() << '\n';
+
+        } else {
+            std::cerr << "GUI not implemented yet";
+            return 1;
+        }
 
     } catch (const std::exception& ex) {
         std::cerr << "error: " << ex.what() << '\n';

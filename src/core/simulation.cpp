@@ -1,6 +1,7 @@
 #include "core/simulation.hpp"
 #include "core/behaviour.hpp"
 #include "core/routing.hpp"
+#include "core/network.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <utility>
@@ -35,6 +36,8 @@ CarId Simulation::add_car_at(EdgeId edge, LaneIdx lane, Meters offset, ProfileId
 }
 
 void Simulation::tick() {
+
+    size_t exited_before = m_cars_exited;
 
     do_spawning();
 
@@ -71,6 +74,16 @@ void Simulation::tick() {
 
     enforce_conservation();
 
+    size_t m_tick_throughput = m_cars_exited - exited_before;
+
+    if (m_writer && m_tick >= m_warmup_ticks) {
+        io::TickRecord tk;
+        tk.tick = m_tick;
+        tk.in_network = m_cars.size();
+        tk.throughput = m_tick_throughput;
+        m_writer->write_tick(tk);
+    }
+
     ++m_tick;
 }
 
@@ -83,6 +96,21 @@ void Simulation::retire_at_sinks() {
         bool at_sink = last_edge && c.offset >= L && m_net.nodes[end_node].kind == NodeKind::Sink;
 
         if (at_sink) {
+            if (m_writer && m_tick >= m_warmup_ticks) {
+                const Car& car = m_cars[i];
+                io::TripRecord tr;
+                tr.car_id = car.id; 
+                tr.spawn_tick = car.spawn_tick;
+                tr.exit_tick = m_tick;
+                tr.trip_distance = car.trip_distance;
+                double dur_s = static_cast<double>(m_tick - car.spawn_tick) * TICK_DT;
+                tr.avg_speed = (dur_s > 0.0) ? car.trip_distance / dur_s : 0.0;
+                tr.lane_changes = car.lane_changes;
+                tr.violations = car.violations;
+                tr.archetype = (car.profile_id < m_profiles.size()) 
+                                ? m_profiles[car.profile_id].name : "unknown";
+                m_writer -> write_trip(tr);
+            }
             m_cars[i] = std::move(m_cars.back());
             m_cars.pop_back();
             ++m_cars_exited;
@@ -328,6 +356,14 @@ void Simulation::do_lane_change() {
             }
         }
     }
+}
+
+void Simulation::set_output_dir(const std::filesystem::path& out_dir, const std::string& stamp) {
+    m_writer = std::make_unique<io::MetricsWriter>(out_dir, stamp);
+}
+
+void Simulation::set_warmup_ticks(TickT warmup) {
+    m_warmup_ticks = warmup;
 }
 
 }

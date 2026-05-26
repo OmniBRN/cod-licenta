@@ -16,8 +16,8 @@ MetricsWriter::MetricsWriter(const std::filesystem::path& out_dir, const std::st
         throw std::runtime_error("MetricsWriter: cannot open output files");
     
     // CSV Headers
-    m_trips << "car_id,spawn_tick,exit_tick"
-            << "trip_distance_m,avg_speed_mps,lane_changes"
+    m_trips << "car_id,spawn_tick,exit_tick,"
+            << "trip_distance_m,avg_speed_mps,lane_changes,"
             << "violations, archetype\n";
     m_ticks << "tick, in_network, throughput\n";
     m_open = true;
