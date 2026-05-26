@@ -22,6 +22,7 @@ add_library(simcore STATIC
     src/core/routing.cpp
     src/core/traffic_light.cpp
     src/io/network_loader.cpp
+    src/io/metrics_writer.cpp
     src/rng/prng.cpp
     src/sim/spawner.cpp
 )
@@ -80,6 +81,7 @@ add_executable(sim_tests
     tests/test_traffic_light.cpp
     tests/test_lane_change.cpp
     tests/test_metrics.cpp
+    tests/test_metrics_writer.cpp
 )
 
 target_include_directories(sim_tests PRIVATE ${CMAKE_SOURCE_DIR}/tests)
