@@ -47,6 +47,11 @@ void Simulation::tick() {
     for (size_t i = 0; i < m_cars.size(); ++i) {
         const BehaviourProfile& bp = m_profiles[m_cars[i].profile_id];
         bool obey = m_rng.compliance.bernoulli(bp.traffic_law_compliance);
+        if (!obey) {
+            auto lit = m_lights.find(m_cars[i].current_edge);
+            if (lit != m_lights.end() && lit->second.is_red())
+                ++m_cars[i].violations;
+        }
         auto L = find_leader(i, obey);
         Meters gap = L.exists ? L.gap : std::numeric_limits<Meters>::infinity();
         MetersPerSec dv = L.exists ? (m_cars[i].speed - L.lead_speed) : 0.0;
@@ -57,6 +62,7 @@ void Simulation::tick() {
 
     for (auto& c: m_cars) {
         c.speed = std::max(0.0, c.speed + c.accel * TICK_DT);
+        c.trip_distance += c.speed * TICK_DT;
         c.offset = c.offset + c.speed * TICK_DT;
         advance_edges(c);
     }
@@ -293,15 +299,17 @@ void Simulation::do_lane_change() {
         if (c.current_lane != c.intended_lane) {
             if(gap_accept(i, c.intended_lane)) {
                 c.current_lane = c.intended_lane;
+                ++c.lane_changes;
                 continue;
             }
-        }
 
-        int step = (c.intended_lane > c.current_lane) ? 1 : -1;
-        LaneIdx next = static_cast<LaneIdx>(c.current_lane + step);
-        if (gap_accept(i, next)) {
-            c.current_lane = next;
-            continue;
+            int step = (c.intended_lane > c.current_lane) ? 1 : -1;
+            LaneIdx next = static_cast<LaneIdx>(c.current_lane + step);
+            if (gap_accept(i, next)) {
+                c.current_lane = next;
+                ++c.lane_changes;
+                continue;
+            }
         }
 
         const BehaviourProfile& bp = m_profiles[c.profile_id];
@@ -315,6 +323,7 @@ void Simulation::do_lane_change() {
             if(c.intended_lane != c.current_lane) continue;
             if(gap_accept(i,target)){
                 c.current_lane = target; 
+                ++c.lane_changes;
                 break;
             }
         }

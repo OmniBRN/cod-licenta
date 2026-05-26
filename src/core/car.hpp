@@ -20,5 +20,8 @@ struct Car {
 
     TickT spawn_tick = 0;
     Meters trip_distance = 0.0;
+
+    uint32_t lane_changes = 0;
+    uint32_t violations = 0;
 };
 }

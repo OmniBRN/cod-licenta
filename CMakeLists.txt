@@ -79,6 +79,7 @@ add_executable(sim_tests
     tests/test_intended_lane.cpp
     tests/test_traffic_light.cpp
     tests/test_lane_change.cpp
+    tests/test_metrics.cpp
 )
 
 target_include_directories(sim_tests PRIVATE ${CMAKE_SOURCE_DIR}/tests)
