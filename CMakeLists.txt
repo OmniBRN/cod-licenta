@@ -71,7 +71,12 @@ set(IMGUI_SFML_CONFIG_NAME "imconfig-custom.h" CACHE STRING "" FORCE)
 add_subdirectory(include/imgui-sfml)
 
 # Executabil
-add_executable(sim src/main.cpp)
+
+# src/gui/render.cpp src/gui/app.cpp
+add_executable(sim
+    src/main.cpp
+)
+target_include_directories(sim PRIVATE ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(sim PRIVATE simcore ImGui-SFML::ImGui-SFML)
 
 # Tests
