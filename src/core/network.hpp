@@ -38,6 +38,7 @@ public:
     std::vector<std::vector<EdgeId>> out_edges;
 
     Vec2 point_at(EdgeId e, LaneIdx lane, Meters offset) const;
+    Vec2 direction_at(EdgeId e, LaneIdx lane, Meters offset) const;
 
     Meters edge_length(EdgeId e) const { return edges[e].length; }
 
