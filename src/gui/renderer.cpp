@@ -1,4 +1,5 @@
 #include "gui/renderer.hpp"
+#include <cmath>
 
 namespace sim::gui {
 
@@ -64,14 +65,15 @@ void Renderer::draw_lights() {
     for (const auto& [eid, tl] : m_sim.lights()) {
         const Edge& e = m_sim.network().edges[eid];
         Vec2 p = m_sim.network().point_at(eid, 0, e.length - 3.0);
-        sf::CircleShape c(5.f);
-        c.setOrigin({5.f, 5.f});
+        constexpr float R = 1.2f;
+        sf::CircleShape c(R);
+        c.setOrigin({R, R});
         c.setPosition({(float)p.x, (float)p.y});
         if (tl.is_green()) c.setFillColor(sf::Color::Green);
         else if (tl.is_yellow()) c.setFillColor(sf::Color::Yellow);
         else  c.setFillColor(sf::Color::Red);
         c.setOutlineColor(sf::Color::Black);
-        c.setOutlineThickness(1.f);
+        c.setOutlineThickness(0.3f);
         m_win.draw(c);
     }
 }
@@ -80,11 +82,17 @@ void Renderer::draw_cars(sf::Vector2f /*mouse_world*/){
     const Network& net = m_sim.network();
     for (const auto& car : m_sim.cars()) {
         Vec2 pos = net.point_at(car.current_edge, car.current_lane, car.offset);
+        Vec2 dir = net.direction_at(car.current_edge, car.current_lane, car.offset);
+
         sf::RectangleShape rect(
             {(float)CAR_LENGTH, (float)(LANE_WIDTH * 0.6f)}
         );
         rect.setOrigin({(float)CAR_LENGTH / 2.f, (float)(LANE_WIDTH * 0.3f)});
         rect.setPosition({(float)pos.x, (float)pos.y});
+
+        float angle_deg = std::atan2f((float)dir.y, (float)dir.x) * (180.0f / 3.14159265f);
+        rect.setRotation(sf::degrees(angle_deg));
+
         rect.setFillColor(archetype_color(car.profile_id));
         m_win.draw(rect);
     }
