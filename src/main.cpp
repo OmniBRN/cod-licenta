@@ -1,4 +1,5 @@
 #include "core/simulation.hpp"
+#include "gui/app.hpp"
 #include "io/network_loader.hpp"
 #include <iostream>
 #include <string>
@@ -56,8 +57,9 @@ int main(int argc, char** argv){
                       << "in_net=" << s.in_network() << '\n';
 
         } else {
-            std::cerr << "GUI not implemented yet";
-            return 1;
+            // GUI
+            sim::gui::App app(std::move(s));
+            app.run();
         }
 
     } catch (const std::exception& ex) {
