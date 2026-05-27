@@ -49,6 +49,9 @@ public:
     void set_output_dir(const std::filesystem::path& out_dir, const std::string& stamp);
     void set_warmup_ticks(TickT);
 
+    const BehaviourProfile& profile(ProfileId id) const { return m_profiles.at(id); }
+
+
 private:
 
     Network m_net;
