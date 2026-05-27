@@ -272,7 +272,7 @@ void Simulation::do_spawning(){
 bool Simulation::spawn_point_blocked(const Car& c) const {
     for(const auto& o : m_cars)
         if(o.current_edge == c.current_edge &&
-           o.current_lane == c.current_edge &&
+           o.current_lane == c.current_lane &&
            o.offset < CAR_LENGTH + 2.0)
             return true;
     return false;
