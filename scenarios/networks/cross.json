@@ -1,17 +1,38 @@
 {
     "sources": [
         {
-            "node": 0,
+            "node": 1,
             "rate_per_sec": 0.2,
             "archetype_mix": [0.3, 0.4, 0.15, 0.1, 0.05],
-            "destinations": [2, 4, 6],
-            "destination_mix": [0.5, 0.3, 0.2]
+            "destinations": [2, 4, 6, 8],
+            "destination_mix": [0.5, 0.3, 0.1, 0.1]
+        },
+        {
+            "node": 3,
+            "rate_per_sec": 0.2,
+            "archetype_mix": [0.3, 0.4, 0.15, 0.1, 0.05],
+            "destinations": [2, 4, 6, 8],
+            "destination_mix": [0.5, 0.3, 0.1, 0.1]
+        },
+        {
+            "node": 5,
+            "rate_per_sec": 0.2,
+            "archetype_mix": [0.3, 0.4, 0.15, 0.1, 0.05],
+            "destinations": [2, 4, 6, 8],
+            "destination_mix": [0.5, 0.3, 0.1, 0.1]
+        },
+        {
+            "node": 7,
+            "rate_per_sec": 0.2,
+            "archetype_mix": [0.3, 0.4, 0.15, 0.1, 0.05],
+            "destinations": [2, 4, 6, 8],
+            "destination_mix": [0.5, 0.3, 0.1, 0.1]
         }
     ],
     "lights": [
         {"edge": 0, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "green"},
-        {"edge": 2, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "red"},
-        {"edge": 4, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "green"},
+        {"edge": 2, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "green"},
+        {"edge": 4, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "red"},
         {"edge": 6, "green_dur": 300, "yellow_dur": 30, "red_dur":330, "start_color": "red"}
     ],
     "nodes": [
