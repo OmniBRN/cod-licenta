@@ -1,6 +1,7 @@
 #include "gui/app.hpp"
 #include <imgui.h>
 #include <imgui-SFML.h>
+#include <stdexcept>
 
 namespace sim::gui {
 
@@ -9,7 +10,8 @@ App::App(Simulation sim)
     , m_win(sf::VideoMode({1280u, 720u}), "Traffic Simulation")
     , m_renderer(m_win, m_sim)
 {
-    ImGui::SFML::Init(m_win);
+    if (!ImGui::SFML::Init(m_win))
+        throw std::runtime_error("ImGui::SFML::Init failed");
     m_win.setFramerateLimit(60);
 }
 
@@ -98,6 +100,56 @@ void App::draw_imgui() {
     ImGui::Text("In Network: %zu | Left Network: %zu | Spawned: %zu", 
                 m_sim.in_network(), m_sim.exited(), m_sim.spawned());
     ImGui::Text("Throughput (100 tick average): %.2f cars", avg_tput);
+    ImGui::End(); // ##metrics
+
+    if (m_selected != 0) {
+        const Car* found = nullptr;
+        for (const auto& c : m_sim.cars())
+            if(c.id == m_selected) {
+                found = &c;
+                break;
+            }
+        bool open = true;
+        ImGui::SetNextWindowPos({860, 0}, ImGuiCond_Once);
+        ImGui::SetNextWindowSize({420, 210}, ImGuiCond_Once);
+        ImGui::Begin("Inspect Car", &open);
+        if (found) {
+            const auto& bp = m_sim.profile(found->profile_id);
+            ImGui::Text("ID: %u | Archetype: %s", found->id, bp.name.c_str());
+            ImGui::Separator();
+            ImGui::Text("Edge: %u Lane: %u", found->current_edge, found->current_lane);
+            ImGui::Text("Offset: %.1f m | Speed: %.2f m/s (%.1f km/h)", found->offset, found->speed, found->speed*3.6);
+            ImGui::Text("Acceleration: %.3f m/s^2", found->accel);
+            ImGui::Separator();
+            ImGui::Text("Trip dist: %.1f m", found->trip_distance);
+            ImGui::Text("Lane Changes: %u | Violations: %u", found->lane_changes, found->violations);
+            ImGui::Text("Intended lane: %u", found->intended_lane);
+        } else {
+            ImGui::TextDisabled("Car %u left the network.", m_selected);
+        }
+        ImGui::End();
+        if (!open) m_selected = 0;
+    }
+    ImGui::SetNextWindowPos({0, 135}, ImGuiCond_Always);
+    ImGui::SetNextWindowSize({160, 130}, ImGuiCond_Always);
+    ImGui::Begin("##legend", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize
+                | ImGuiWindowFlags_NoMove);
+    ImGui::TextDisabled("Archetypes:");
+    const char* names[5] = {"ideal", "cautious", "normal", "aggresive", "opportunist"};
+    static const ImVec4 cols[5] = {
+        {0.0f, 0.59f, 0.78f, 1},
+        {0.31f, 0.78f, 0.31f, 1},
+        {0.86f, 0.86f, 0.20f, 1},
+        {0.86f, 0.31f, 0.31f, 1},
+        {0.71f, 0.31f, 0.86f, 1},
+    };
+    for(int i=0; i<5; ++i) {
+        ImGui::PushID(i);
+        ImGui::ColorButton("##col", cols[i], ImGuiColorEditFlags_NoTooltip, {12, 12});
+        ImGui::PopID();
+        ImGui::SameLine();
+        ImGui::TextUnformatted(names[i]);
+    }
     ImGui::End();
 }
 
