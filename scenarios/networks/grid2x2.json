@@ -2,13 +2,13 @@
     "sources": [
         {
             "node": 4,
-            "rate_per_sec": 0.15,
+            "rate_per_sec": 0.4,
             "archetype_mix": [
-                0.3,
-                0.4,
-                0.15,
-                0.1,
-                0.05
+                0.2,
+                0.2,
+                0.2,
+                0.2,
+                0.2
             ],
             "destinations": [
                 7,
@@ -25,13 +25,13 @@
         },
         {
             "node": 6,
-            "rate_per_sec": 0.15,
+            "rate_per_sec": 0.4,
             "archetype_mix": [
-                0.3,
-                0.4,
-                0.15,
-                0.1,
-                0.05
+                0.2,
+                0.2,
+                0.2,
+                0.2,
+                0.2
             ],
             "destinations": [
                 5,
@@ -48,13 +48,13 @@
         },
         {
             "node": 8,
-            "rate_per_sec": 0.15,
+            "rate_per_sec": 0.4,
             "archetype_mix": [
-                0.3,
-                0.4,
-                0.15,
-                0.1,
-                0.05
+                0.2,
+                0.2,
+                0.2,
+                0.2,
+                0.2
             ],
             "destinations": [
                 17,
@@ -71,13 +71,13 @@
         },
         {
             "node": 10,
-            "rate_per_sec": 0.15,
+            "rate_per_sec": 0.4,
             "archetype_mix": [
-                0.3,
-                0.4,
-                0.15,
-                0.1,
-                0.05
+                0.2,
+                0.2,
+                0.2,
+                0.2,
+                0.2
             ],
             "destinations": [
                 19,
@@ -94,13 +94,13 @@
         },
         {
             "node": 12,
-            "rate_per_sec": 0.15,
+            "rate_per_sec": 0.4,
             "archetype_mix": [
-                0.3,
-                0.4,
-                0.15,
-                0.1,
-                0.05
+                0.2,
+                0.2,
+                0.2,
+                0.2,
+                0.2
             ],
             "destinations": [
                 15,
@@ -117,13 +117,13 @@
         },
         {
             "node": 14,
-            "rate_per_sec": 0.15,
+            "rate_per_sec": 0.4,
             "archetype_mix": [
-                0.3,
-                0.4,
-                0.15,
-                0.1,
-                0.05
+                0.2,
+                0.2,
+                0.2,
+                0.2,
+                0.2
             ],
             "destinations": [
                 13,
@@ -140,13 +140,13 @@
         },
         {
             "node": 16,
-            "rate_per_sec": 0.15,
+            "rate_per_sec": 0.4,
             "archetype_mix": [
-                0.3,
-                0.4,
-                0.15,
-                0.1,
-                0.05
+                0.2,
+                0.2,
+                0.2,
+                0.2,
+                0.2
             ],
             "destinations": [
                 9,
@@ -163,13 +163,13 @@
         },
         {
             "node": 18,
-            "rate_per_sec": 0.15,
+            "rate_per_sec": 0.4,
             "archetype_mix": [
-                0.3,
-                0.4,
-                0.15,
-                0.1,
-                0.05
+                0.2,
+                0.2,
+                0.2,
+                0.2,
+                0.2
             ],
             "destinations": [
                 11,
@@ -872,581 +872,72 @@
         }
     ],
     "turn_map": [
-        {
-            "from_edge": 0,
-            "from_lane": 0,
-            "to_edge": 5,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 0,
-            "from_lane": 1,
-            "to_edge": 5,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 0,
-            "from_lane": 0,
-            "to_edge": 16,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 0,
-            "from_lane": 1,
-            "to_edge": 16,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 0,
-            "from_lane": 0,
-            "to_edge": 20,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 0,
-            "from_lane": 1,
-            "to_edge": 20,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 4,
-            "from_lane": 0,
-            "to_edge": 1,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 4,
-            "from_lane": 1,
-            "to_edge": 1,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 4,
-            "from_lane": 0,
-            "to_edge": 16,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 4,
-            "from_lane": 1,
-            "to_edge": 16,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 4,
-            "from_lane": 0,
-            "to_edge": 20,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 4,
-            "from_lane": 1,
-            "to_edge": 20,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 17,
-            "from_lane": 0,
-            "to_edge": 1,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 17,
-            "from_lane": 1,
-            "to_edge": 1,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 17,
-            "from_lane": 0,
-            "to_edge": 5,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 17,
-            "from_lane": 1,
-            "to_edge": 5,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 17,
-            "from_lane": 0,
-            "to_edge": 20,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 17,
-            "from_lane": 1,
-            "to_edge": 20,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 21,
-            "from_lane": 0,
-            "to_edge": 1,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 21,
-            "from_lane": 1,
-            "to_edge": 1,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 21,
-            "from_lane": 0,
-            "to_edge": 5,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 21,
-            "from_lane": 1,
-            "to_edge": 5,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 21,
-            "from_lane": 0,
-            "to_edge": 16,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 21,
-            "from_lane": 1,
-            "to_edge": 16,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 2,
-            "from_lane": 0,
-            "to_edge": 7,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 2,
-            "from_lane": 1,
-            "to_edge": 7,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 2,
-            "from_lane": 0,
-            "to_edge": 17,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 2,
-            "from_lane": 1,
-            "to_edge": 17,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 2,
-            "from_lane": 0,
-            "to_edge": 22,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 2,
-            "from_lane": 1,
-            "to_edge": 22,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 6,
-            "from_lane": 0,
-            "to_edge": 3,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 6,
-            "from_lane": 1,
-            "to_edge": 3,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 6,
-            "from_lane": 0,
-            "to_edge": 17,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 6,
-            "from_lane": 1,
-            "to_edge": 17,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 6,
-            "from_lane": 0,
-            "to_edge": 22,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 6,
-            "from_lane": 1,
-            "to_edge": 22,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 16,
-            "from_lane": 0,
-            "to_edge": 3,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 16,
-            "from_lane": 1,
-            "to_edge": 3,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 16,
-            "from_lane": 0,
-            "to_edge": 7,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 16,
-            "from_lane": 1,
-            "to_edge": 7,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 16,
-            "from_lane": 0,
-            "to_edge": 22,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 16,
-            "from_lane": 1,
-            "to_edge": 22,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 23,
-            "from_lane": 0,
-            "to_edge": 3,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 23,
-            "from_lane": 1,
-            "to_edge": 3,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 23,
-            "from_lane": 0,
-            "to_edge": 7,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 23,
-            "from_lane": 1,
-            "to_edge": 7,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 23,
-            "from_lane": 0,
-            "to_edge": 17,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 23,
-            "from_lane": 1,
-            "to_edge": 17,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 8,
-            "from_lane": 0,
-            "to_edge": 13,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 8,
-            "from_lane": 1,
-            "to_edge": 13,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 8,
-            "from_lane": 0,
-            "to_edge": 21,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 8,
-            "from_lane": 1,
-            "to_edge": 21,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 8,
-            "from_lane": 0,
-            "to_edge": 18,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 8,
-            "from_lane": 1,
-            "to_edge": 18,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 12,
-            "from_lane": 0,
-            "to_edge": 9,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 12,
-            "from_lane": 1,
-            "to_edge": 9,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 12,
-            "from_lane": 0,
-            "to_edge": 21,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 12,
-            "from_lane": 1,
-            "to_edge": 21,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 12,
-            "from_lane": 0,
-            "to_edge": 18,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 12,
-            "from_lane": 1,
-            "to_edge": 18,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 20,
-            "from_lane": 0,
-            "to_edge": 9,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 20,
-            "from_lane": 1,
-            "to_edge": 9,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 20,
-            "from_lane": 0,
-            "to_edge": 13,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 20,
-            "from_lane": 1,
-            "to_edge": 13,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 20,
-            "from_lane": 0,
-            "to_edge": 18,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 20,
-            "from_lane": 1,
-            "to_edge": 18,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 19,
-            "from_lane": 0,
-            "to_edge": 9,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 19,
-            "from_lane": 1,
-            "to_edge": 9,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 19,
-            "from_lane": 0,
-            "to_edge": 13,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 19,
-            "from_lane": 1,
-            "to_edge": 13,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 19,
-            "from_lane": 0,
-            "to_edge": 21,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 19,
-            "from_lane": 1,
-            "to_edge": 21,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 10,
-            "from_lane": 0,
-            "to_edge": 15,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 10,
-            "from_lane": 1,
-            "to_edge": 15,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 10,
-            "from_lane": 0,
-            "to_edge": 19,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 10,
-            "from_lane": 1,
-            "to_edge": 19,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 10,
-            "from_lane": 0,
-            "to_edge": 23,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 10,
-            "from_lane": 1,
-            "to_edge": 23,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 14,
-            "from_lane": 0,
-            "to_edge": 11,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 14,
-            "from_lane": 1,
-            "to_edge": 11,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 14,
-            "from_lane": 0,
-            "to_edge": 19,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 14,
-            "from_lane": 1,
-            "to_edge": 19,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 14,
-            "from_lane": 0,
-            "to_edge": 23,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 14,
-            "from_lane": 1,
-            "to_edge": 23,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 18,
-            "from_lane": 0,
-            "to_edge": 11,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 18,
-            "from_lane": 1,
-            "to_edge": 11,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 18,
-            "from_lane": 0,
-            "to_edge": 15,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 18,
-            "from_lane": 1,
-            "to_edge": 15,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 18,
-            "from_lane": 0,
-            "to_edge": 23,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 18,
-            "from_lane": 1,
-            "to_edge": 23,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 22,
-            "from_lane": 0,
-            "to_edge": 11,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 22,
-            "from_lane": 1,
-            "to_edge": 11,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 22,
-            "from_lane": 0,
-            "to_edge": 15,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 22,
-            "from_lane": 1,
-            "to_edge": 15,
-            "to_lane": 1
-        },
-        {
-            "from_edge": 22,
-            "from_lane": 0,
-            "to_edge": 19,
-            "to_lane": 0
-        },
-        {
-            "from_edge": 22,
-            "from_lane": 1,
-            "to_edge": 19,
-            "to_lane": 1
-        }
+        { "from_edge": 0,  "from_lane": 0, "to_edge": 16, "to_lane": 0 },
+        { "from_edge": 0,  "from_lane": 0, "to_edge": 5,  "to_lane": 0 },
+        { "from_edge": 0,  "from_lane": 1, "to_edge": 16, "to_lane": 1 },
+        { "from_edge": 0,  "from_lane": 1, "to_edge": 20, "to_lane": 1 },
+        { "from_edge": 4,  "from_lane": 0, "to_edge": 20, "to_lane": 0 },
+        { "from_edge": 4,  "from_lane": 0, "to_edge": 16, "to_lane": 0 },
+        { "from_edge": 4,  "from_lane": 1, "to_edge": 20, "to_lane": 1 },
+        { "from_edge": 4,  "from_lane": 1, "to_edge": 1,  "to_lane": 1 },
+        { "from_edge": 17, "from_lane": 0, "to_edge": 1,  "to_lane": 0 },
+        { "from_edge": 17, "from_lane": 0, "to_edge": 20, "to_lane": 0 },
+        { "from_edge": 17, "from_lane": 1, "to_edge": 1,  "to_lane": 1 },
+        { "from_edge": 17, "from_lane": 1, "to_edge": 5,  "to_lane": 1 },
+        { "from_edge": 21, "from_lane": 0, "to_edge": 5,  "to_lane": 0 },
+        { "from_edge": 21, "from_lane": 0, "to_edge": 1,  "to_lane": 0 },
+        { "from_edge": 21, "from_lane": 1, "to_edge": 5,  "to_lane": 1 },
+        { "from_edge": 21, "from_lane": 1, "to_edge": 16, "to_lane": 1 },
+
+        { "from_edge": 2,  "from_lane": 0, "to_edge": 17, "to_lane": 0 },
+        { "from_edge": 2,  "from_lane": 0, "to_edge": 22, "to_lane": 0 },
+        { "from_edge": 2,  "from_lane": 1, "to_edge": 17, "to_lane": 1 },
+        { "from_edge": 2,  "from_lane": 1, "to_edge": 7,  "to_lane": 1 },
+        { "from_edge": 6,  "from_lane": 0, "to_edge": 22, "to_lane": 0 },
+        { "from_edge": 6,  "from_lane": 0, "to_edge": 3,  "to_lane": 0 },
+        { "from_edge": 6,  "from_lane": 1, "to_edge": 22, "to_lane": 1 },
+        { "from_edge": 6,  "from_lane": 1, "to_edge": 17, "to_lane": 1 },
+        { "from_edge": 16, "from_lane": 0, "to_edge": 3,  "to_lane": 0 },
+        { "from_edge": 16, "from_lane": 0, "to_edge": 7,  "to_lane": 0 },
+        { "from_edge": 16, "from_lane": 1, "to_edge": 3,  "to_lane": 1 },
+        { "from_edge": 16, "from_lane": 1, "to_edge": 22, "to_lane": 1 },
+        { "from_edge": 23, "from_lane": 0, "to_edge": 7,  "to_lane": 0 },
+        { "from_edge": 23, "from_lane": 0, "to_edge": 17, "to_lane": 0 },
+        { "from_edge": 23, "from_lane": 1, "to_edge": 7,  "to_lane": 1 },
+        { "from_edge": 23, "from_lane": 1, "to_edge": 3,  "to_lane": 1 },
+
+        { "from_edge": 8,  "from_lane": 0, "to_edge": 18, "to_lane": 0 },
+        { "from_edge": 8,  "from_lane": 0, "to_edge": 21, "to_lane": 0 },
+        { "from_edge": 8,  "from_lane": 1, "to_edge": 18, "to_lane": 1 },
+        { "from_edge": 8,  "from_lane": 1, "to_edge": 13, "to_lane": 1 },
+        { "from_edge": 12, "from_lane": 0, "to_edge": 21, "to_lane": 0 },
+        { "from_edge": 12, "from_lane": 0, "to_edge": 9,  "to_lane": 0 },
+        { "from_edge": 12, "from_lane": 1, "to_edge": 21, "to_lane": 1 },
+        { "from_edge": 12, "from_lane": 1, "to_edge": 18, "to_lane": 1 },
+        { "from_edge": 19, "from_lane": 0, "to_edge": 9,  "to_lane": 0 },
+        { "from_edge": 19, "from_lane": 0, "to_edge": 13, "to_lane": 0 },
+        { "from_edge": 19, "from_lane": 1, "to_edge": 9,  "to_lane": 1 },
+        { "from_edge": 19, "from_lane": 1, "to_edge": 21, "to_lane": 1 },
+        { "from_edge": 20, "from_lane": 0, "to_edge": 13, "to_lane": 0 },
+        { "from_edge": 20, "from_lane": 0, "to_edge": 18, "to_lane": 0 },
+        { "from_edge": 20, "from_lane": 1, "to_edge": 13, "to_lane": 1 },
+        { "from_edge": 20, "from_lane": 1, "to_edge": 9,  "to_lane": 1 },
+
+        { "from_edge": 10, "from_lane": 0, "to_edge": 19, "to_lane": 0 },
+        { "from_edge": 10, "from_lane": 0, "to_edge": 15, "to_lane": 0 },
+        { "from_edge": 10, "from_lane": 1, "to_edge": 19, "to_lane": 1 },
+        { "from_edge": 10, "from_lane": 1, "to_edge": 23, "to_lane": 1 },
+        { "from_edge": 14, "from_lane": 0, "to_edge": 23, "to_lane": 0 },
+        { "from_edge": 14, "from_lane": 0, "to_edge": 19, "to_lane": 0 },
+        { "from_edge": 14, "from_lane": 1, "to_edge": 23, "to_lane": 1 },
+        { "from_edge": 14, "from_lane": 1, "to_edge": 11, "to_lane": 1 },
+        { "from_edge": 18, "from_lane": 0, "to_edge": 11, "to_lane": 0 },
+        { "from_edge": 18, "from_lane": 0, "to_edge": 23, "to_lane": 0 },
+        { "from_edge": 18, "from_lane": 1, "to_edge": 11, "to_lane": 1 },
+        { "from_edge": 18, "from_lane": 1, "to_edge": 15, "to_lane": 1 },
+        { "from_edge": 22, "from_lane": 0, "to_edge": 15, "to_lane": 0 },
+        { "from_edge": 22, "from_lane": 0, "to_edge": 11, "to_lane": 0 },
+        { "from_edge": 22, "from_lane": 1, "to_edge": 15, "to_lane": 1 },
+        { "from_edge": 22, "from_lane": 1, "to_edge": 19, "to_lane": 1 }
     ]
 }
