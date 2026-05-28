@@ -2,7 +2,7 @@
     "sources": [
         {
             "node": 4,
-            "rate_per_sec": 0.4,
+            "rate_per_sec": 0.15,
             "archetype_mix": [
                 0.2,
                 0.2,
@@ -25,7 +25,7 @@
         },
         {
             "node": 6,
-            "rate_per_sec": 0.4,
+            "rate_per_sec": 0.15,
             "archetype_mix": [
                 0.2,
                 0.2,
@@ -48,7 +48,7 @@
         },
         {
             "node": 8,
-            "rate_per_sec": 0.4,
+            "rate_per_sec": 0.15,
             "archetype_mix": [
                 0.2,
                 0.2,
@@ -71,7 +71,7 @@
         },
         {
             "node": 10,
-            "rate_per_sec": 0.4,
+            "rate_per_sec": 0.15,
             "archetype_mix": [
                 0.2,
                 0.2,
@@ -94,7 +94,7 @@
         },
         {
             "node": 12,
-            "rate_per_sec": 0.4,
+            "rate_per_sec": 0.15,
             "archetype_mix": [
                 0.2,
                 0.2,
@@ -117,7 +117,7 @@
         },
         {
             "node": 14,
-            "rate_per_sec": 0.4,
+            "rate_per_sec": 0.15,
             "archetype_mix": [
                 0.2,
                 0.2,
@@ -140,7 +140,7 @@
         },
         {
             "node": 16,
-            "rate_per_sec": 0.4,
+            "rate_per_sec": 0.15,
             "archetype_mix": [
                 0.2,
                 0.2,
@@ -163,7 +163,7 @@
         },
         {
             "node": 18,
-            "rate_per_sec": 0.4,
+            "rate_per_sec": 0.15,
             "archetype_mix": [
                 0.2,
                 0.2,
