@@ -24,15 +24,20 @@ public:
     CarId pick_car(sf::Vector2f mouse_world) const;
 
     Camera& camera() { return m_cam; }
+    void set_selected(CarId id) { m_selected_car = id; }
 
 private:
     sf::RenderWindow& m_win;
     const Simulation& m_sim;
     Camera m_cam;
+    sf::Font m_font;
+    bool m_font_loaded = false;
+    CarId m_selected_car = 0;
 
     void draw_network();
     void draw_lights();
     void draw_cars(sf::Vector2f mouse_world);
+    void draw_speed_limits();
 
     static sf::Color archetype_color(ProfileId id);
 

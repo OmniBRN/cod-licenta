@@ -61,6 +61,7 @@ Network load_network(const std::filesystem::path& p){
         }
         require(e.polyline.size() >= 2, "polyline needs >=2 points");
         e.length = polyline_length(e.polyline);
+        e.speed_limit = je.value("speed_limit_kmh", 50.0) * (10.0 / 36.0);
 
         if (net.edges.size() <= e.id) net.edges.resize(e.id + 1);
         net.edges[e.id] = e;

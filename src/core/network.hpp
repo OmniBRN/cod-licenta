@@ -19,6 +19,7 @@ struct Edge{
     uint8_t lanes_forward = 1;
     std::vector<Vec2> polyline;
     Meters length = 0;
+    MetersPerSec speed_limit = 50.0 * (10.0 / 36.0);
 };
 
 struct TurnRule{

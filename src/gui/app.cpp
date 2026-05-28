@@ -28,6 +28,7 @@ void App::run() {
         sf::Vector2f mw = m_win.mapPixelToCoords(mp);
         m_win.setView(m_win.getDefaultView());
 
+        m_renderer.set_selected(m_selected);
         m_renderer.draw(mw);
 
         ImGui::SFML::Update(m_win, clock.restart());

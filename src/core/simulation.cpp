@@ -161,7 +161,17 @@ CarId Simulation::spawn_car(Car proto) {
 void Simulation::step_car(Car& c, Meters gap, MetersPerSec dv) {
     const BehaviourProfile& bp = m_profiles[c.profile_id];
 
-    c.accel = idm_accel(bp, c.speed, gap, dv);
+    constexpr double KMH_TO_MS = 10.0 / 36.0;
+    MetersPerSec limit = m_net.edges[c.current_edge].speed_limit;
+    MetersPerSec cap = limit + bp.aggressiveness * (15.0 * KMH_TO_MS);
+
+    if (bp.desired_speed > cap) {
+        BehaviourProfile capped = bp;
+        capped.desired_speed = cap;
+        c.accel = idm_accel(capped, c.speed, gap, dv);
+    } else {
+        c.accel = idm_accel(bp, c.speed, gap, dv);
+    }
 }
 
 void Simulation::advance_edges(Car& c) {
@@ -231,11 +241,13 @@ Simulation::LeaderInfo Simulation::find_leader(size_t car_idx, bool obey_lights)
     if (obey_lights) {
         auto lit = m_lights.find(c.current_edge);
         if (lit != m_lights.end() && lit->second.is_red()) {
-            Meters stop_line = m_net.edge_length(c.current_edge);
-            Meters gap_to_stop = (stop_line - c.offset) - CAR_LENGTH;
-            LeaderInfo stop{std::max(gap_to_stop, 0.0), 0.0, true};
-            if (!real.exists || stop.gap < real.gap)
-                return stop;
+            Meters stop_line = m_net.edge_length(c.current_edge) - CAR_LENGTH;
+            if (c.offset < stop_line) {
+                Meters gap_to_stop = stop_line - c.offset;
+                LeaderInfo stop{std::max(gap_to_stop, 0.0), 0.0, true};
+                if (!real.exists || stop.gap < real.gap)
+                    return stop;
+            }
         }
     }
 

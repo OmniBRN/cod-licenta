@@ -43,8 +43,16 @@ void Camera::handle_event(const sf::Event& ev, sf::RenderWindow& win) {
 
 }
 
-Renderer::Renderer(sf::RenderWindow& win, const Simulation& sim) 
-    : m_win(win), m_sim(sim), m_cam(sf::FloatRect({-350.f, -350.f}, {700.f, 700.f})) {}
+Renderer::Renderer(sf::RenderWindow& win, const Simulation& sim)
+    : m_win(win), m_sim(sim), m_cam([&win]() {
+        auto sz = win.getSize();
+        float half_h = 350.f;
+        float half_w = half_h * (float)sz.x / (float)sz.y;
+        return sf::FloatRect({-half_w, -half_h}, {2.f * half_w, 2.f * half_h});
+    }())
+{
+    m_font_loaded = m_font.openFromFile("include/imgui/misc/fonts/Roboto-Medium.ttf");
+}
 
 void Renderer::draw_network() {
     const Network net = m_sim.network();
@@ -64,7 +72,7 @@ void Renderer::draw_network() {
 void Renderer::draw_lights() {
     for (const auto& [eid, tl] : m_sim.lights()) {
         const Edge& e = m_sim.network().edges[eid];
-        Vec2 p = m_sim.network().point_at(eid, 0, e.length - 3.0);
+        Vec2 p = m_sim.network().point_at(eid, 0, e.length - CAR_LENGTH);
         constexpr float R = 1.2f;
         sf::CircleShape c(R);
         c.setOrigin({R, R});
@@ -94,7 +102,47 @@ void Renderer::draw_cars(sf::Vector2f /*mouse_world*/){
         rect.setRotation(sf::degrees(angle_deg));
 
         rect.setFillColor(archetype_color(car.profile_id));
+        if (car.id == m_selected_car) {
+            rect.setOutlineColor(sf::Color::White);
+            rect.setOutlineThickness(0.6f);
+        }
         m_win.draw(rect);
+    }
+}
+
+void Renderer::draw_speed_limits() {
+    if (!m_font_loaded) return;
+    const Network& net = m_sim.network();
+    for (const auto& edge : net.edges) {
+        if (edge.polyline.size() < 2) continue;
+
+        Meters pos_along = edge.length * 0.3;
+        Vec2 dir = net.direction_at(edge.id, 0, pos_along);
+        Vec2 right = perpendicular(dir);
+
+        Vec2 lane0 = net.point_at(edge.id, 0, pos_along);
+        double lateral = (edge.lanes_forward + 0.5) * LANE_WIDTH + 6.0;
+        Vec2 sp = lane0 + right * lateral;
+
+        constexpr float W = 12.0f, H = 9.0f;
+        sf::RectangleShape box({W, H});
+        box.setOrigin({W / 2.f, H / 2.f});
+        box.setPosition({(float)sp.x, (float)sp.y});
+        box.setFillColor(sf::Color::White);
+        box.setOutlineColor(sf::Color::Red);
+        box.setOutlineThickness(0.8f);
+        m_win.draw(box);
+
+        int kmh = static_cast<int>(std::round(edge.speed_limit * 3.6));
+        sf::Text txt(m_font, std::to_string(kmh), 100);
+        txt.setFillColor(sf::Color::Black);
+        constexpr float TEXT_H = 5.5f;
+        float scale = TEXT_H / 100.f;
+        txt.setScale({scale, scale});
+        sf::FloatRect lb = txt.getLocalBounds();
+        txt.setOrigin({lb.position.x + lb.size.x / 2.f, lb.position.y + lb.size.y / 2.f});
+        txt.setPosition({(float)sp.x, (float)sp.y});
+        m_win.draw(txt);
     }
 }
 
@@ -102,6 +150,8 @@ void Renderer::draw(sf::Vector2f mouse_world) {
     m_win.setView(m_cam.view);
     draw_network();
     draw_lights();
+    // Looks ugly, rework it later
+    draw_speed_limits();
     draw_cars(mouse_world);
     m_win.setView(m_win.getDefaultView());
 }
