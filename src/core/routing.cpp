@@ -67,14 +67,24 @@ std::optional<std::vector<EdgeId>> shortest_path_edges (const Network& net, Node
 LaneIdx compute_intended_lane(const Network& net, const Car& c) {
     if (c.route.empty() || c.route_index + 1 >= c.route.size())
         return c.current_lane;
-    
+
     EdgeId cur = c.route[c.route_index];
     EdgeId next = c.route[c.route_index + 1];
 
+    bool any_rule = false;
+    LaneIdx best = c.current_lane;
+    uint8_t best_dist = 255;
     for (const auto& r: net.turn_rules) {
-        if (r.from_edge == cur && r.to_edge == next)
-            return r.from_lane;
+        if (r.from_edge == cur && r.to_edge == next) {
+            any_rule = true;
+            if (r.from_lane == c.current_lane)
+                return c.current_lane;
+            uint8_t dist = (r.from_lane > c.current_lane)
+                         ? (r.from_lane - c.current_lane)
+                         : (c.current_lane - r.from_lane);
+            if (dist < best_dist) { best_dist = dist; best = r.from_lane; }
+        }
     }
-    return 0;
+    return any_rule ? best : c.current_lane;
 }
 }

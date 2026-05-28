@@ -92,6 +92,7 @@ private:
 
     std::unordered_map<EdgeId, TrafficLight> m_lights;
     void tick_lights();
+    void apply_junction_approach();
 
     bool gap_accept(size_t car_idx, LaneIdx target) const;
     bool in_intesection(const Car& c) const;

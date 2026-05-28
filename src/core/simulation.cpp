@@ -63,6 +63,8 @@ void Simulation::tick() {
 
     do_lane_change();
 
+    apply_junction_approach();
+
     for (auto& c: m_cars) {
         c.speed = std::max(0.0, c.speed + c.accel * TICK_DT);
         c.trip_distance += c.speed * TICK_DT;
@@ -205,13 +207,26 @@ Simulation::LeaderInfo Simulation::find_leader(size_t car_idx, bool obey_lights)
         return off < m_cars[other].offset;
     });
 
-    LeaderInfo real = (it==lane.end()) 
+    LeaderInfo real = (it==lane.end())
     ? LeaderInfo{std::numeric_limits<Meters>::infinity(), 0.0, false}
     : [&](){
         const Car& lead = m_cars[*it];
         Meters gap = (lead.offset - c.offset) - CAR_LENGTH;
         return LeaderInfo{std::max(gap, 0.0), lead.speed, true};
     }();
+
+    if (c.route_index + 1 < c.route.size()) {
+        EdgeId next_edge = c.route[c.route_index + 1];
+        LaneIdx next_lane = std::min<LaneIdx>(c.current_lane, m_net.edges[next_edge].lanes_forward - 1);
+        const auto& nxt = m_lane_cars[next_edge][next_lane];
+        if (!nxt.empty()) {
+            const Car& ahead = m_cars[nxt.front()];
+            Meters edge_remaining = m_net.edge_length(c.current_edge) - c.offset;
+            Meters gap = std::max(0.0, edge_remaining + ahead.offset - CAR_LENGTH);
+            if (!real.exists || gap < real.gap)
+                real = {gap, ahead.speed, true};
+        }
+    }
 
     if (obey_lights) {
         auto lit = m_lights.find(c.current_edge);
@@ -252,10 +267,11 @@ void Simulation::do_spawning(){
         }
         Car proto;
         proto.current_edge = (*path)[0];
-        proto.current_lane = 0;
         proto.offset = 0.0;
         proto.speed = 0.0;
         proto.route = std::move(*path);
+        proto.current_lane = static_cast<LaneIdx>(
+            m_cars_spawned % m_net.edges[proto.current_edge].lanes_forward);
         proto.intended_lane = compute_intended_lane(m_net, proto);
         proto.route_index = 0;
         proto.profile_id = p.profile;
@@ -291,6 +307,32 @@ void Simulation::tick_lights() {
     for (auto& [eid, tl] : m_lights) tl.advance();
 }
 
+void Simulation::apply_junction_approach() {
+    constexpr MetersPerSec JUNCTION_SPEED = 5.0;
+    for (auto& c : m_cars) {
+        if (c.speed <= JUNCTION_SPEED) continue;
+        if (c.route_index + 1 >= c.route.size()) continue;
+        NodeId dst = m_net.edges[c.current_edge].to;
+        if (m_net.nodes[dst].kind != NodeKind::Junction) continue;
+
+        EdgeId nxt = c.route[c.route_index + 1];
+        Vec2 cur_dir = m_net.direction_at(c.current_edge, c.current_lane,
+                                          m_net.edge_length(c.current_edge));
+        Vec2 nxt_dir = m_net.direction_at(nxt, 0, 0.0);
+        if (cur_dir.x * nxt_dir.x + cur_dir.y * nxt_dir.y >= 0.7) continue;
+
+        const BehaviourProfile& bp = m_profiles[c.profile_id];
+        double braking_dist = (c.speed * c.speed - JUNCTION_SPEED * JUNCTION_SPEED)
+                              / (2.0 * bp.comfort_brake);
+        Meters dist = m_net.edge_length(c.current_edge) - c.offset;
+        if (dist > braking_dist) continue;
+
+        double needed = (c.speed * c.speed - JUNCTION_SPEED * JUNCTION_SPEED)
+                        / (2.0 * std::max(dist, 1.0));
+        c.accel = std::min(c.accel, -needed);
+    }
+}
+
 bool Simulation::gap_accept(size_t car_idx, LaneIdx target) const {
     const Car& c = m_cars[car_idx];
     EdgeId e = c.current_edge;
@@ -321,9 +363,12 @@ void Simulation::do_lane_change() {
     for(size_t i = 0; i<m_cars.size(); ++i) {
         Car& c = m_cars[i];
 
+        if (c.lane_change_cooldown > 0) --c.lane_change_cooldown;
+
         if (in_intesection(c)) continue;
 
         uint8_t max_lane = m_net.edges[c.current_edge].lanes_forward-1;
+
         if (c.current_lane != c.intended_lane) {
             if(gap_accept(i, c.intended_lane)) {
                 c.current_lane = c.intended_lane;
@@ -340,20 +385,58 @@ void Simulation::do_lane_change() {
             }
         }
 
-        const BehaviourProfile& bp = m_profiles[c.profile_id];
+        if (c.lane_change_cooldown > 0) continue;
 
+        const BehaviourProfile& bp = m_profiles[c.profile_id];
         if (!m_rng.lane_change.bernoulli(bp.aggressiveness * 0.05)) continue;
+
+        const auto& cur_vec = m_lane_cars[c.current_edge][c.current_lane];
+        auto cur_it = std::upper_bound(cur_vec.begin(), cur_vec.end(), c.offset,
+            [&](Meters off, size_t idx){ return off < m_cars[idx].offset; });
+        MetersPerSec cur_leader_spd = (cur_it != cur_vec.end())
+            ? m_cars[*cur_it].speed
+            : std::numeric_limits<MetersPerSec>::infinity();
+
+        if (cur_leader_spd >= bp.desired_speed * 0.9) continue;
 
         for(int delta:{-1, 1}) {
             int target_int = static_cast<int>(c.current_lane) + delta;
             if (target_int < 0 || target_int > static_cast<int>(max_lane)) continue;
             LaneIdx target = static_cast<LaneIdx>(target_int);
-            if(c.intended_lane != c.current_lane) continue;
-            if(gap_accept(i,target)){
-                c.current_lane = target; 
-                ++c.lane_changes;
-                break;
-            }
+            if (c.intended_lane != c.current_lane) continue;
+
+            auto route_accepts = [&]() -> bool {
+                if (c.route_index + 1 >= c.route.size()) return true;
+                EdgeId cur_edge = c.route[c.route_index];
+                EdgeId nxt = c.route[c.route_index + 1];
+                bool any_rule = false;
+                for (const auto& r : m_net.turn_rules) {
+                    if (r.from_edge == cur_edge && r.to_edge == nxt) {
+                        any_rule = true;
+                        if (r.from_lane == target) return true;
+                    }
+                }
+                return !any_rule;
+            };
+            if (!route_accepts()) continue;
+
+            if (!gap_accept(i, target)) continue;
+
+            const auto& tgt_vec = m_lane_cars[c.current_edge][target];
+            auto tgt_it = std::upper_bound(tgt_vec.begin(), tgt_vec.end(), c.offset,
+                [&](Meters off, size_t idx){ return off < m_cars[idx].offset; });
+            MetersPerSec tgt_leader_spd = (tgt_it != tgt_vec.end())
+                ? m_cars[*tgt_it].speed
+                : std::numeric_limits<MetersPerSec>::infinity();
+
+            constexpr MetersPerSec MIN_BENEFIT = 2.0;
+            if (tgt_leader_spd < cur_leader_spd + MIN_BENEFIT) continue;
+            if (tgt_leader_spd < c.speed) continue;
+
+            c.current_lane = target;
+            ++c.lane_changes;
+            c.lane_change_cooldown = 30;
+            break;
         }
     }
 }
