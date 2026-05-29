@@ -18,6 +18,7 @@ using Seconds = double;
 constexpr Meters LANE_WIDTH = 3.5;
 constexpr Seconds TICK_DT = 0.1;
 constexpr Meters CAR_LENGTH = 5.0;
+constexpr TickT LANE_CHANGE_TICKS = 15; 
 
 struct Vec2 {
     double x = 0.0;

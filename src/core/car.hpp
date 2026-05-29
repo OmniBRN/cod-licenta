@@ -25,5 +25,10 @@ struct Car {
     uint32_t violations = 0;
 
     TickT lane_change_cooldown = 0;
+
+    bool is_changing_lane = false;
+    LaneIdx lane_change_from = 0;
+    LaneIdx lane_change_to = 0;
+    TickT lane_change_ticks_remaining = 0;
 };
 }

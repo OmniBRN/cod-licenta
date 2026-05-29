@@ -89,8 +89,17 @@ void Renderer::draw_lights() {
 void Renderer::draw_cars(sf::Vector2f /*mouse_world*/){
     const Network& net = m_sim.network();
     for (const auto& car : m_sim.cars()) {
-        Vec2 pos = net.point_at(car.current_edge, car.current_lane, car.offset);
-        Vec2 dir = net.direction_at(car.current_edge, car.current_lane, car.offset);
+        Vec2 pos, dir;
+        if (car.is_changing_lane) {
+            double progress = 1.0 - (double)car.lane_change_ticks_remaining / LANE_CHANGE_TICKS;
+            Vec2 p0 = net.point_at(car.current_edge, car.lane_change_from, car.offset);
+            Vec2 p1 = net.point_at(car.current_edge, car.lane_change_to, car.offset);
+            pos = p0 * (1.0 - progress) + p1 * progress;
+            dir = net.direction_at(car.current_edge, car.current_lane, car.offset);
+        } else {
+            pos = net.point_at(car.current_edge, car.current_lane, car.offset);
+            dir = net.direction_at(car.current_edge, car.current_lane, car.offset);
+        }
 
         sf::RectangleShape rect(
             {(float)CAR_LENGTH, (float)(LANE_WIDTH * 0.6f)}

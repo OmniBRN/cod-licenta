@@ -185,6 +185,7 @@ void Simulation::advance_edges(Car& c) {
         c.route_index += 1;
         c.current_edge = c.route[c.route_index];
         c.current_lane = std::min<LaneIdx>(c.current_lane, m_net.edges[c.current_edge].lanes_forward - 1);
+        c.is_changing_lane = false;
         L = m_net.edge_length(c.current_edge);
     }
 }
@@ -198,6 +199,11 @@ void Simulation::rebuild_lane_index() {
     for (size_t i = 0; i < m_cars.size(); ++i) {
         const Car& c = m_cars[i];
         m_lane_cars[c.current_edge][c.current_lane].push_back(i);
+        if (c.is_changing_lane &&
+            c.lane_change_to < m_net.edges[c.current_edge].lanes_forward &&
+            c.lane_change_to != c.current_lane) {
+            m_lane_cars[c.current_edge][c.lane_change_to].push_back(i);
+        }
     }
     for (auto& per_edge : m_lane_cars) 
         for (auto& lane: per_edge)
@@ -372,10 +378,22 @@ bool Simulation::in_intesection(const Car& c) const {
 }
 
 void Simulation::do_lane_change() {
+    for (auto& c : m_cars) {
+        if (!c.is_changing_lane) continue;
+        if (c.lane_change_ticks_remaining == 0) {
+            c.current_lane = c.lane_change_to;
+            c.is_changing_lane = false;
+        } else {
+            --c.lane_change_ticks_remaining;
+        }
+    }
+
     for(size_t i = 0; i<m_cars.size(); ++i) {
         Car& c = m_cars[i];
 
         if (c.lane_change_cooldown > 0) --c.lane_change_cooldown;
+
+        if (c.is_changing_lane) continue;
 
         if (in_intesection(c)) continue;
 
@@ -383,7 +401,10 @@ void Simulation::do_lane_change() {
 
         if (c.current_lane != c.intended_lane) {
             if(gap_accept(i, c.intended_lane)) {
-                c.current_lane = c.intended_lane;
+                c.is_changing_lane = true;
+                c.lane_change_from = c.current_lane;
+                c.lane_change_to = c.intended_lane;
+                c.lane_change_ticks_remaining = LANE_CHANGE_TICKS;
                 ++c.lane_changes;
                 continue;
             }
@@ -391,7 +412,10 @@ void Simulation::do_lane_change() {
             int step = (c.intended_lane > c.current_lane) ? 1 : -1;
             LaneIdx next = static_cast<LaneIdx>(c.current_lane + step);
             if (gap_accept(i, next)) {
-                c.current_lane = next;
+                c.is_changing_lane = true;
+                c.lane_change_from = c.current_lane;
+                c.lane_change_to = next;
+                c.lane_change_ticks_remaining = LANE_CHANGE_TICKS;
                 ++c.lane_changes;
                 continue;
             }
@@ -445,7 +469,10 @@ void Simulation::do_lane_change() {
             if (tgt_leader_spd < cur_leader_spd + MIN_BENEFIT) continue;
             if (tgt_leader_spd < c.speed) continue;
 
-            c.current_lane = target;
+            c.is_changing_lane = true;
+            c.lane_change_from = c.current_lane;
+            c.lane_change_to = target;
+            c.lane_change_ticks_remaining = LANE_CHANGE_TICKS;
             ++c.lane_changes;
             c.lane_change_cooldown = 30;
             break;
