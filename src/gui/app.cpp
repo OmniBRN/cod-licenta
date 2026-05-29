@@ -59,11 +59,12 @@ void App::process_events() {
 
 void App::update() {
     if (m_play.paused) return;
-    size_t before = m_sim.exited();
-    for (int i=0; i<m_play.speed_mult; ++i) m_sim.tick();
-    size_t throughput = m_sim.exited() - before;
-    m_tput_window.push_back(throughput);
-    if (m_tput_window.size() > 100) m_tput_window.pop_front();
+    for (int i = 0; i < m_play.speed_mult; ++i) {
+        size_t before = m_sim.exited();
+        m_sim.tick();
+        m_tput_window.push_back(m_sim.exited() - before);
+        if (m_tput_window.size() > 100) m_tput_window.pop_front();
+    }
 }
 
 void App::draw_imgui() {
@@ -76,8 +77,10 @@ void App::draw_imgui() {
         m_play.paused = !m_play.paused;
     ImGui::SameLine();
     if (ImGui::Button("Step") && m_play.paused) {
+        size_t before = m_sim.exited();
         m_sim.tick();
-        m_tput_window.push_back(0);
+        m_tput_window.push_back(m_sim.exited() - before);
+        if (m_tput_window.size() > 100) m_tput_window.pop_front();
     }
     ImGui::SameLine();
     const char* speed_labels[] = {"1x", "2x", "10x"};
@@ -100,7 +103,7 @@ void App::draw_imgui() {
     ImGui::Text("Tick: %llu", (unsigned long long)m_sim.current_tick());
     ImGui::Text("In Network: %zu | Left Network: %zu | Spawned: %zu", 
                 m_sim.in_network(), m_sim.exited(), m_sim.spawned());
-    ImGui::Text("Throughput (100 tick average): %.2f cars", avg_tput);
+    ImGui::Text("Throughput (100 tick average): %.2f cars/s", avg_tput);
     ImGui::End(); // ##metrics
 
     if (m_selected != 0) {

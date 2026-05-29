@@ -3,7 +3,7 @@
 #include <fstream>
 #include <unordered_set>
 #include <stdexcept>
-#include <sstream>
+#include <cmath>
 
 using nlohmann::json;
 
@@ -105,6 +105,27 @@ std::vector<SourceSpec> load_sources(const std::filesystem::path& p) {
         sp.archetype_mix = s.at("archetype_mix").get<std::vector<double>>();
         sp.destinations = s.at("destinations").get<std::vector<NodeId>>();
         sp.destination_mix = s.at("destination_mix").get<std::vector<double>>();
+
+        const std::string id = "source node " + std::to_string(sp.node);
+        require(sp.archetype_mix.size() == 5,
+                id + ": archetype_mix must have exactly 5 entries");
+        require(!sp.destinations.empty(),
+                id + ": destinations must not be empty");
+        require(sp.destinations.size() == sp.destination_mix.size(),
+                id + ": destinations and destination_mix length mismatch");
+
+        auto check_sum = [&](const std::vector<double>& v, const char* what) {
+            double sum = 0.0;
+            for (double x : v) {
+                require(x >= 0.0, id + ": " + what + " has a negative entry");
+                sum += x;
+            }
+            require(std::abs(sum - 1.0) < 1e-6,
+                    id + ": " + what + " must sum to 1.0");
+        };
+        check_sum(sp.archetype_mix, "archetype_mix");
+        check_sum(sp.destination_mix, "destination_mix");
+
         out.push_back(std::move(sp));
     }
     return out;

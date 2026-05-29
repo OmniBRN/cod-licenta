@@ -47,15 +47,17 @@ void Simulation::tick() {
 
     rebuild_lane_index();
 
+    // std::vector<uint8_t> ran_red_edge(m_cars.size(), 0);
+
     for (size_t i = 0; i < m_cars.size(); ++i) {
-        const BehaviourProfile& bp = m_profiles[m_cars[i].profile_id];
-        bool obey = m_rng.compliance.bernoulli(bp.traffic_law_compliance);
-        if (!obey) {
-            auto lit = m_lights.find(m_cars[i].current_edge);
-            if (lit != m_lights.end() && lit->second.is_red())
-                ++m_cars[i].violations;
-        }
-        auto L = find_leader(i, obey);
+        // const BehaviourProfile& bp = m_profiles[m_cars[i].profile_id];
+        // bool obey = m_rng.compliance.bernoulli(bp.traffic_law_compliance);
+        // if (!obey) {
+        //     auto lit = m_lights.find(m_cars[i].current_edge);
+        //     if (lit != m_lights.end() && lit->second.is_red())
+        //         ran_red_edge[i] = 1;
+        // }
+        auto L = find_leader(i, true);
         Meters gap = L.exists ? L.gap : std::numeric_limits<Meters>::infinity();
         MetersPerSec dv = L.exists ? (m_cars[i].speed - L.lead_speed) : 0.0;
         step_car(m_cars[i], gap, dv);
@@ -65,10 +67,20 @@ void Simulation::tick() {
 
     apply_junction_approach();
 
-    for (auto& c: m_cars) {
+    for (size_t i = 0; i < m_cars.size(); ++i) {
+        Car& c = m_cars[i];
+        // Meters offset_before = c.offset;
+        // EdgeId edge_before = c.current_edge;
+
         c.speed = std::max(0.0, c.speed + c.accel * TICK_DT);
         c.trip_distance += c.speed * TICK_DT;
         c.offset = c.offset + c.speed * TICK_DT;
+
+        // if (ran_red_edge[i]) {
+        //     Meters stop_line = m_net.edge_length(edge_before) - CAR_LENGTH;
+        //     if (offset_before < stop_line && c.offset >= stop_line)
+        //         ++c.violations;
+        // }
         advance_edges(c);
     }
 
