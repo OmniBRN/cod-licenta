@@ -453,20 +453,20 @@ void Simulation::do_lane_change() {
             LaneIdx target = static_cast<LaneIdx>(target_int);
             if (c.intended_lane != c.current_lane) continue;
 
-            auto route_accepts = [&]() -> bool {
-                if (c.route_index + 1 >= c.route.size()) return true;
-                EdgeId cur_edge = c.route[c.route_index];
-                EdgeId nxt = c.route[c.route_index + 1];
-                bool any_rule = false;
-                for (const auto& r : m_net.turn_rules) {
-                    if (r.from_edge == cur_edge && r.to_edge == nxt) {
-                        any_rule = true;
-                        if (r.from_lane == target) return true;
-                    }
-                }
-                return !any_rule;
-            };
-            if (!route_accepts()) continue;
+            // auto route_accepts = [&]() -> bool {
+            //     if (c.route_index + 1 >= c.route.size()) return true;
+            //     EdgeId cur_edge = c.route[c.route_index];
+            //     EdgeId nxt = c.route[c.route_index + 1];
+            //     bool any_rule = false;
+            //     for (const auto& r : m_net.turn_rules) {
+            //         if (r.from_edge == cur_edge && r.to_edge == nxt) {
+            //             any_rule = true;
+            //             if (r.from_lane == target) return true;
+            //         }
+            //     }
+            //     return !any_rule;
+            // };
+            // if (!route_accepts()) continue;
 
             if (!gap_accept(i, target)) continue;
 
