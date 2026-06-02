@@ -412,15 +412,6 @@ void Simulation::do_lane_change() {
         uint8_t max_lane = m_net.edges[c.current_edge].lanes_forward-1;
 
         if (c.current_lane != c.intended_lane) {
-            if(gap_accept(i, c.intended_lane)) {
-                c.is_changing_lane = true;
-                c.lane_change_from = c.current_lane;
-                c.lane_change_to = c.intended_lane;
-                c.lane_change_ticks_remaining = LANE_CHANGE_TICKS;
-                ++c.lane_changes;
-                continue;
-            }
-
             int step = (c.intended_lane > c.current_lane) ? 1 : -1;
             LaneIdx next = static_cast<LaneIdx>(c.current_lane + step);
             if (gap_accept(i, next)) {
