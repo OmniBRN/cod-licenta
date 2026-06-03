@@ -1,0 +1,125 @@
+{
+    "sources": [
+        {
+            "node": 0,
+            "rate_per_sec": 0.6,
+            "archetype_mix": [
+                0.05,
+                0.25,
+                0.4,
+                0.2,
+                0.1
+            ],
+            "destinations": [
+                2,
+                3
+            ],
+            "destination_mix": [
+                0.6,
+                0.4
+            ]
+        }
+    ],
+    "lights": [],
+    "nodes": [
+        {
+            "id": 0,
+            "pos": [
+                0,
+                -400
+            ],
+            "kind": "source"
+        },
+        {
+            "id": 1,
+            "pos": [
+                0,
+                0
+            ],
+            "kind": "junction"
+        },
+        {
+            "id": 2,
+            "pos": [
+                0,
+                400
+            ],
+            "kind": "sink"
+        },
+        {
+            "id": 3,
+            "pos": [
+                -400,
+                0
+            ],
+            "kind": "sink"
+        }
+    ],
+    "edges": [
+        {
+            "id": 0,
+            "from": 0,
+            "to": 1,
+            "lanes_forward": 2,
+            "polyline": [
+                [
+                    0,
+                    -400
+                ],
+                [
+                    0,
+                    0
+                ]
+            ],
+            "speed_limit_kmh": 50
+        },
+        {
+            "id": 1,
+            "from": 1,
+            "to": 2,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    400
+                ]
+            ],
+            "speed_limit_kmh": 50
+        },
+        {
+            "id": 2,
+            "from": 1,
+            "to": 3,
+            "lanes_forward": 1,
+            "polyline": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    -400,
+                    0
+                ]
+            ],
+            "speed_limit_kmh": 50
+        }
+    ],
+    "turn_map": [
+        {
+            "from_edge": 0,
+            "from_lane": 0,
+            "to_edge": 1,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 0,
+            "from_lane": 1,
+            "to_edge": 2,
+            "to_lane": 0
+        }
+    ]
+}
