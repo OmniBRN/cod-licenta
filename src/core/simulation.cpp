@@ -368,9 +368,9 @@ bool Simulation::gap_accept(size_t car_idx, LaneIdx target) const {
     EdgeId e = c.current_edge;
     if (target >= m_net.edges[e].lanes_forward) return false;
 
-    constexpr Meters SAFE_FRONT = 10.0;
-    constexpr Meters SAFE_REAR = 6.0;
-
+    const double agg = m_profiles[c.profile_id].aggressiveness;
+    const Meters SAFE_FRONT = 14.0 - 8.0 * agg;  
+    const Meters SAFE_REAR  = 9.0 - 6.0 * agg;  
     for (size_t idx: m_lane_cars[e][target]) {
         const Car& o = m_cars[idx];
         if (o.offset > c.offset) {
