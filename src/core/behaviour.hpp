@@ -66,13 +66,13 @@ inline BehaviourProfile aggresive_profile() {
 inline BehaviourProfile opportunist_profile() {
     BehaviourProfile p;
     p.name = "opportunist";
-    p.desired_speed = 60 * (10.0/36.0);
-    p.max_accel = 2.0;
-    p.comfort_brake = 2.5;
-    p.reaction_time = 1.0;
-    p.min_headway = 6.0;
+    p.desired_speed = 50 * (10.0/36.0);
+    p.max_accel = 1.5;
+    p.comfort_brake = 2.0;
+    p.reaction_time = 1.2;
+    p.min_headway = 8.0;
     p.aggressiveness = 0.85;
-    p.traffic_law_compliance = 0.90;
+    p.traffic_law_compliance = 0.95;
     return p;
 }
 
