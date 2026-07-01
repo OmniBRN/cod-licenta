@@ -1,0 +1,428 @@
+{
+    "sources": [
+        {
+            "node": 1,
+            "rate_per_sec": 0.35,
+            "archetype_mix": [
+                0,
+                0.3,
+                0.45,
+                0.25,
+                0
+            ],
+            "destinations": [
+                4,
+                6,
+                8
+            ],
+            "destination_mix": [
+                0.5,
+                0.25,
+                0.25
+            ]
+        },
+        {
+            "node": 3,
+            "rate_per_sec": 0.35,
+            "archetype_mix": [
+                0,
+                0.3,
+                0.45,
+                0.25,
+                0
+            ],
+            "destinations": [
+                2,
+                8,
+                6
+            ],
+            "destination_mix": [
+                0.5,
+                0.25,
+                0.25
+            ]
+        },
+        {
+            "node": 5,
+            "rate_per_sec": 0.35,
+            "archetype_mix": [
+                0,
+                0.3,
+                0.45,
+                0.25,
+                0
+            ],
+            "destinations": [
+                8,
+                4,
+                2
+            ],
+            "destination_mix": [
+                0.5,
+                0.25,
+                0.25
+            ]
+        },
+        {
+            "node": 7,
+            "rate_per_sec": 0.35,
+            "archetype_mix": [
+                0,
+                0.3,
+                0.45,
+                0.25,
+                0
+            ],
+            "destinations": [
+                6,
+                2,
+                4
+            ],
+            "destination_mix": [
+                0.5,
+                0.25,
+                0.25
+            ]
+        }
+    ],
+    "lights": [
+        {
+            "edge": 0,
+            "green_dur": 300,
+            "yellow_dur": 30,
+            "red_dur": 330,
+            "start_color": "green"
+        },
+        {
+            "edge": 2,
+            "green_dur": 300,
+            "yellow_dur": 30,
+            "red_dur": 330,
+            "start_color": "green"
+        },
+        {
+            "edge": 4,
+            "green_dur": 300,
+            "yellow_dur": 30,
+            "red_dur": 330,
+            "start_color": "red"
+        },
+        {
+            "edge": 6,
+            "green_dur": 300,
+            "yellow_dur": 30,
+            "red_dur": 330,
+            "start_color": "red"
+        }
+    ],
+    "nodes": [
+        {
+            "id": 0,
+            "pos": [
+                0,
+                0
+            ],
+            "kind": "junction"
+        },
+        {
+            "id": 1,
+            "pos": [
+                -200,
+                0
+            ],
+            "kind": "source"
+        },
+        {
+            "id": 2,
+            "pos": [
+                -200,
+                0
+            ],
+            "kind": "sink"
+        },
+        {
+            "id": 3,
+            "pos": [
+                200,
+                0
+            ],
+            "kind": "source"
+        },
+        {
+            "id": 4,
+            "pos": [
+                200,
+                0
+            ],
+            "kind": "sink"
+        },
+        {
+            "id": 5,
+            "pos": [
+                0,
+                200
+            ],
+            "kind": "source"
+        },
+        {
+            "id": 6,
+            "pos": [
+                0,
+                200
+            ],
+            "kind": "sink"
+        },
+        {
+            "id": 7,
+            "pos": [
+                0,
+                -200
+            ],
+            "kind": "source"
+        },
+        {
+            "id": 8,
+            "pos": [
+                0,
+                -200
+            ],
+            "kind": "sink"
+        }
+    ],
+    "edges": [
+        {
+            "id": 0,
+            "from": 1,
+            "to": 0,
+            "lanes_forward": 2,
+            "polyline": [
+                [
+                    -200,
+                    0
+                ],
+                [
+                    0,
+                    0
+                ]
+            ],
+            "speed_limit_kmh": 50
+        },
+        {
+            "id": 1,
+            "from": 0,
+            "to": 2,
+            "lanes_forward": 2,
+            "polyline": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    -200,
+                    0
+                ]
+            ],
+            "speed_limit_kmh": 50
+        },
+        {
+            "id": 2,
+            "from": 3,
+            "to": 0,
+            "lanes_forward": 2,
+            "polyline": [
+                [
+                    200,
+                    0
+                ],
+                [
+                    0,
+                    0
+                ]
+            ],
+            "speed_limit_kmh": 50
+        },
+        {
+            "id": 3,
+            "from": 0,
+            "to": 4,
+            "lanes_forward": 2,
+            "polyline": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    200,
+                    0
+                ]
+            ],
+            "speed_limit_kmh": 50
+        },
+        {
+            "id": 4,
+            "from": 5,
+            "to": 0,
+            "lanes_forward": 2,
+            "polyline": [
+                [
+                    0,
+                    200
+                ],
+                [
+                    0,
+                    0
+                ]
+            ],
+            "speed_limit_kmh": 50
+        },
+        {
+            "id": 5,
+            "from": 0,
+            "to": 6,
+            "lanes_forward": 2,
+            "polyline": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    200
+                ]
+            ],
+            "speed_limit_kmh": 50
+        },
+        {
+            "id": 6,
+            "from": 7,
+            "to": 0,
+            "lanes_forward": 2,
+            "polyline": [
+                [
+                    0,
+                    -200
+                ],
+                [
+                    0,
+                    0
+                ]
+            ],
+            "speed_limit_kmh": 50
+        },
+        {
+            "id": 7,
+            "from": 0,
+            "to": 8,
+            "lanes_forward": 2,
+            "polyline": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    -200
+                ]
+            ],
+            "speed_limit_kmh": 50
+        }
+    ],
+    "turn_map": [
+        {
+            "from_edge": 0,
+            "from_lane": 1,
+            "to_edge": 5,
+            "to_lane": 1
+        },
+        {
+            "from_edge": 0,
+            "from_lane": 1,
+            "to_edge": 3,
+            "to_lane": 1
+        },
+        {
+            "from_edge": 0,
+            "from_lane": 0,
+            "to_edge": 7,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 0,
+            "from_lane": 0,
+            "to_edge": 3,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 2,
+            "from_lane": 1,
+            "to_edge": 7,
+            "to_lane": 1
+        },
+        {
+            "from_edge": 2,
+            "from_lane": 1,
+            "to_edge": 1,
+            "to_lane": 1
+        },
+        {
+            "from_edge": 2,
+            "from_lane": 0,
+            "to_edge": 5,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 2,
+            "from_lane": 0,
+            "to_edge": 1,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 4,
+            "from_lane": 1,
+            "to_edge": 3,
+            "to_lane": 1
+        },
+        {
+            "from_edge": 4,
+            "from_lane": 1,
+            "to_edge": 7,
+            "to_lane": 1
+        },
+        {
+            "from_edge": 4,
+            "from_lane": 0,
+            "to_edge": 1,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 4,
+            "from_lane": 0,
+            "to_edge": 7,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 6,
+            "from_lane": 1,
+            "to_edge": 1,
+            "to_lane": 1
+        },
+        {
+            "from_edge": 6,
+            "from_lane": 1,
+            "to_edge": 5,
+            "to_lane": 1
+        },
+        {
+            "from_edge": 6,
+            "from_lane": 0,
+            "to_edge": 3,
+            "to_lane": 0
+        },
+        {
+            "from_edge": 6,
+            "from_lane": 0,
+            "to_edge": 5,
+            "to_lane": 0
+        }
+    ]
+}
